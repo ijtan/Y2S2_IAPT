@@ -1,2 +1,0 @@
-8f0fa2a8c312442f9affe5f603452212|C:\Users\kinkt\OneDrive\VisualCodeProjects\Uni\Year 2\Sem 2\iapt\XRTest\Assets\Images\earth.jpg|0.0998331
-188fed2227e546a1bdde4e947d19fa1a|C:\Users\kinkt\OneDrive\VisualCodeProjects\Uni\Year 2\Sem 2\iapt\XRTest\Assets\Images\starbucks.jpg|0.0987654
