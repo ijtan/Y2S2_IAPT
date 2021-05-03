@@ -128,7 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spin: 1
   spinParent: 0
-  speed: 10
+  speed: 45
   clockwise: 1
   direction: 1
   directionChangeSpeed: 2
