@@ -17,8 +17,8 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 1d13a4744898f2a4cb742eae59905595
   m_SerializeEntries:
-  - m_GUID: a44d99e8b0def6d48afb3d74687d386f
-    m_Address: Assets/Prefabs/ExampleCube.prefab
+  - m_GUID: 5c974765462abb947bb8259605511b70
+    m_Address: Assets/Prefabs/Sphere Add.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - remote

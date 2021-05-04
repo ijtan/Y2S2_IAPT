@@ -12,6 +12,10 @@ public class GPS : MonoBehaviour
     public float UPDATE_TIME = 1f;
     public string host = "http://192.168.0.7";
     public string port = "5000";
+    //public List<string> vicinity;
+
+    //int index = 0;
+    public List<string> responses;
 
     public static GPS Instance { set; get; }
     // Start is called before the first frame update
@@ -87,7 +91,7 @@ public class GPS : MonoBehaviour
                 Dictionary<string, string> args = new Dictionary<string, string>();
                 args.Add("lat", newlat.ToString());
                 args.Add("lon", newlon.ToString());
-                pingAPI("getNear",args);
+                pingAPI("getNear", args);
             }
 
             lon = newlon;
@@ -98,23 +102,24 @@ public class GPS : MonoBehaviour
         }
     }
 
-    private void pingAPI(string page="",Dictionary<string,string> args=null)
+    public void pingAPI(string page = "", Dictionary<string, string> args = null)
     {
-        
 
-        string urlToPing = host + ':' + port+'/'+page;
+
+        string urlToPing = host + ':' + port + '/' + page;
         if (args != null)
         {
-            
+
             bool isfirst = true;
-            foreach(KeyValuePair<string, string> arg in args){
+            foreach (KeyValuePair<string, string> arg in args)
+            {
                 if (isfirst)
                 {
                     urlToPing += '?';
                     isfirst = false;
 
                 }
-                    
+
                 else
                     urlToPing += '&';
 
@@ -130,6 +135,7 @@ public class GPS : MonoBehaviour
 
     IEnumerator GetRequest(string uri)
     {
+        string response = "";
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
             // Request and wait for the desired page.
@@ -148,10 +154,12 @@ public class GPS : MonoBehaviour
                     Debug.LogError(pages[page] + ": HTTP Error: " + webRequest.error);
                     break;
                 case UnityWebRequest.Result.Success:
-                    Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
+                    response = webRequest.downloadHandler.text;
+                    Debug.Log(pages[page] + ":\nReceived: " + response);
                     break;
             }
         }
+        responses.Add(response);
     }
 
 
