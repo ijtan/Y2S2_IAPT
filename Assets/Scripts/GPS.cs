@@ -8,7 +8,7 @@ public class GPS : MonoBehaviour
 {
     public float lat;
     public float lon;
-    public float UPDATE_TIME = 3f;
+    public float UPDATE_TIME = 1f;
 
     public static GPS Instance { set; get; }
     // Start is called before the first frame update
@@ -29,7 +29,7 @@ public class GPS : MonoBehaviour
 
     private IEnumerator StartLocServ()
     {
-       if (!Input.location.isEnabledByUser)
+        if (!Input.location.isEnabledByUser)
         {
             Debug.LogError("Location (GPS) not enabled by user!");
             yield break;
@@ -38,7 +38,7 @@ public class GPS : MonoBehaviour
         Input.location.Start();
         int maxWait = 20;
 
-        while(Input.location.status==LocationServiceStatus.Initializing && maxWait > 0)
+        while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
         {
             yield return new WaitForSeconds(1);
             maxWait--;
@@ -52,7 +52,7 @@ public class GPS : MonoBehaviour
 
         if (Input.location.status == LocationServiceStatus.Failed)
         {
-            Debug.LogError("Unable ti dteermine dvice location!");
+            Debug.LogError("Unable to determine device location!");
             yield break;
         }
 
@@ -71,13 +71,17 @@ public class GPS : MonoBehaviour
             yield break;
         }
 
-        
+
         WaitForSeconds updateTime = new WaitForSeconds(UPDATE_TIME);
         while (true)
         {
+            if (Permission.HasUserAuthorizedPermission(Permission.FineLocation))
+            {
+                //Permission.RequestUserPermission(Permission.FineLocation);
 
-            lon = Input.location.lastData.longitude;
-            lat = Input.location.lastData.latitude;
+                lon = Input.location.lastData.longitude;
+                lat = Input.location.lastData.latitude;
+            }
 
             yield return updateTime;
         }
