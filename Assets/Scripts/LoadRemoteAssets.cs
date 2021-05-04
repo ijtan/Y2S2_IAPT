@@ -6,26 +6,18 @@ using UnityEngine.AddressableAssets;
 
 public class LoadRemoteAssets : MonoBehaviour
 {
-    public string label;
-    // Start is called before the first frame update
+    [SerializeField] private string _label;
     void Start()
     {
-        Get(label);
+        Get(_label);
     }
-
 
     private async Task Get(string label)
     {
-        var locs = await Addressables.LoadResourceLocationsAsync(label).Task;
-        foreach(var loc in locs)
-        {
-            await Addressables.Instantiate(loc).Task;
-        }
+        var locations = await Addressables.LoadResourceLocationsAsync(label).Task;
+
+        foreach (var location in locations)
+            await Addressables.InstantiateAsync(location).Task;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
