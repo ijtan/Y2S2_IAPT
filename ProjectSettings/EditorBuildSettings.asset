@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/GPS.unity
+    guid: 66e6e35d811a8114fbc0f779bcce8193
+  - enabled: 0
     path: Assets/Scenes/MultiImageTrack .unity
     guid: 83bc30a70c42f204b9d9a0f4f1aa069c
   - enabled: 0
