@@ -12,13 +12,6 @@ public class UI_GPS_UPDATER : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-#if PLATFORM_ANDROID
-        if (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
-        {
-            Permission.RequestUserPermission(Permission.FineLocation);
-        }
-#endif
-
 
         GPSService = FindObjectOfType<GPS>();
         lat = GPS.Instance.lat.ToString();
