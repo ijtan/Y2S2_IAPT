@@ -91,6 +91,7 @@ public class GPS : MonoBehaviour
                 Dictionary<string, string> args = new Dictionary<string, string>();
                 args.Add("lat", newlat.ToString());
                 args.Add("lon", newlon.ToString());
+                args.Add("uid", SystemInfo.deviceUniqueIdentifier);
                 pingAPI("getNear", args);
             }
 
