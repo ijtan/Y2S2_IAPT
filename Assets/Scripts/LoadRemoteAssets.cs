@@ -5,13 +5,14 @@ using UnityEngine;
 using UnityEngine.Android;
 using UnityEngine.AddressableAssets;
 using UnityEditor;
+using System.Linq.Expressions;
 
 public class LoadRemoteAssets : MonoBehaviour
 {
     [SerializeField] private string _label;
 
     private GPS GPSServ;
-    private Dictionary<string, string> isNear = new Dictionary<string, string>();
+    private Dictionary<string, bool> isNear = new Dictionary<string, bool>();
     private Dictionary<string, GameObject> spawned = new Dictionary<string, GameObject>();
 
     [SerializeField] private float oldLat = 0f;
@@ -36,6 +37,12 @@ public class LoadRemoteAssets : MonoBehaviour
         oldLon = lon;
     }
 
+    public class isNearResponse
+    {
+        public float distance;
+        public bool near;
+    }
+
     private async Task Get(string label)
     {
         var locations = await Addressables.LoadResourceLocationsAsync(label).Task;
@@ -44,7 +51,7 @@ public class LoadRemoteAssets : MonoBehaviour
         foreach (var location in locations)
         {
             if (!isNear.ContainsKey(location.ToString()))            
-                isNear[location.ToString()] = "false";
+                isNear[location.ToString()] = false;
 
 
 
@@ -70,19 +77,19 @@ public class LoadRemoteAssets : MonoBehaviour
             string resp = GPSServ.responses[index].Trim(' ', '\n');
             Debug.Log("Got resp:'" + resp + "'\t ==?" + (resp == "true").ToString());
 
+            isNearResponse nresp = JsonUtility.FromJson<isNearResponse>(resp);
+            Debug.Log("Got Nearness Response; isNear:" + nresp.near + " distance from landmark: " + nresp.distance);
 
 
-
-
-            if (resp == "true" && isNear[location.ToString()] != resp)
+            if (nresp.near && isNear[location.ToString()] != nresp.near)
             {
                 
                 Debug.Log("Instantiating!");
-                isNear[location.ToString()] = resp;
+                isNear[location.ToString()] = nresp.near;
                 GameObject spawn = await Addressables.InstantiateAsync(location).Task;
                 spawned.Add(location.ToString(), spawn);
             }
-            else if (resp == "false" && isNear[location.ToString()] != resp)
+            else if (!nresp.near && isNear[location.ToString()] != nresp.near)
             {
                 Debug.Log("removing!");
                 Destroy(spawned[location.ToString()]);
@@ -93,7 +100,7 @@ public class LoadRemoteAssets : MonoBehaviour
                 Debug.Log("Status not updated!");
             }
 
-            isNear[location.ToString()] = resp;
+            isNear[location.ToString()] = nresp.near;
 
         }
     }

@@ -35,3 +35,23 @@ MonoBehaviour:
     m_SpecifySize: 1
     m_Name: starbucks
     m_Texture: {fileID: 2800000, guid: 991372ce74dd59641919f03fa29a0abc, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 5587632038705991434
+      m_GuidHigh: 607465544740826498
+    m_SerializedTextureGuid:
+      m_GuidLow: 5414528798493415920
+      m_GuidHigh: 13174783643345751547
+    m_Size: {x: 0.1, y: 0.045200698}
+    m_SpecifySize: 1
+    m_Name: plants
+    m_Texture: {fileID: 2800000, guid: 3c5299f045414b24fb0d40aeeb3bd6b6, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 4655868924258595987
+      m_GuidHigh: 3869114984941032839
+    m_SerializedTextureGuid:
+      m_GuidLow: 13431132146460448749
+      m_GuidHigh: 9229012130353648138
+    m_Size: {x: 0.1, y: 0.04439708}
+    m_SpecifySize: 1
+    m_Name: cupboard
+    m_Texture: {fileID: 2800000, guid: a91ad7edf786ba640a128099a2091480, type: 3}

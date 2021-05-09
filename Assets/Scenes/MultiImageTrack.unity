@@ -294,6 +294,8 @@ MonoBehaviour:
   placebalePrefabs:
   - {fileID: 135778, guid: 2f6c5d6ec779606459f39a8773a9fb35, type: 3}
   - {fileID: 6489385668121579142, guid: eada771e0dfb3a34fb5036f631de3a4c, type: 3}
+  - {fileID: 8600409472358997921, guid: e5ff94a27d3bb9c4b8ea955866f6f3da, type: 3}
+  - {fileID: 8600409472358997921, guid: 11c975767b2a5e444b776d795689df5c, type: 3}
 --- !u!114 &917453462
 MonoBehaviour:
   m_ObjectHideFlags: 0
