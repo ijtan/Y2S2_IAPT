@@ -82,19 +82,14 @@ public class LoadRemoteAssets : MonoBehaviour
             Debug.Log("Waiting done!");
             string resp = GPSServ.responses[index];
             Debug.Log("Got resp:'" + resp + "'");
-
-            isNearResponse nresp = JsonUtility.FromJson<isNearResponse>(resp);
+            isNearResponse nresp = new isNearResponse();
+            nresp = JsonUtility.FromJson<isNearResponse>(resp);
             Debug.Log("Got Nearness Response; isNear:" + nresp.near + " distance from landmark: " + nresp.distance);
 
             distances[landmark.ToString()] = nresp.distance;
             distances.OrderBy(key => key.Value);
-            //GPS_UI.closest_landmark = distances.First().Value.ToString();
-            //GPS_UI.closest_landmark = "";
-            foreach(var v in distances.Values)
-            {
-                GPS_UI.closest_landmark += v.ToString();
-                GPS_UI.closest_landmark += " ";
-            }
+            GPS_UI.closest_landmark = distances.First().Value.ToString();
+            GPS_UI.isNear = nresp.near.ToString();
 
 
 
