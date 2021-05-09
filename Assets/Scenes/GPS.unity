@@ -260,8 +260,9 @@ MonoBehaviour:
   lat: 0
   lon: 0
   UPDATE_TIME: 1
-  host: http://192.168.0.7
+  host: http://192.168.0.2
   port: 5000
+  responses: []
 --- !u!114 &576144520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,6 +276,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _label: remote
+  oldLat: 0
+  oldLon: 0
 --- !u!1 &606541310
 GameObject:
   m_ObjectHideFlags: 0
