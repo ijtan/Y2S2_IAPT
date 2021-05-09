@@ -17,9 +17,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PlaneTrack.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 0
-    path: Assets/Scenes/ImageTrack.unity
-    guid: 8ffa129706cff1b4b8babf3267ad3d0d
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 2f7529f4391289d48b5a6c8c4396ed41, type: 2}
     com.unity.addressableassets: {fileID: 11400000, guid: 2a070697d45d7e247a7ca0e1639f06fc, type: 2}

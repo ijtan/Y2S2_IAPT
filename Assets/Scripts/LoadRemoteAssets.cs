@@ -6,29 +6,35 @@ using UnityEngine.Android;
 using UnityEngine.AddressableAssets;
 using UnityEditor;
 using System.Linq.Expressions;
+using System.Linq;
 
 public class LoadRemoteAssets : MonoBehaviour
 {
     [SerializeField] private string _label;
 
     private GPS GPSServ;
+    private UI_GPS_UPDATER GPS_UI;
     private Dictionary<string, bool> isNear = new Dictionary<string, bool>();
+    private Dictionary<string, float> distances = new Dictionary<string, float>();
+
     private Dictionary<string, GameObject> spawned = new Dictionary<string, GameObject>();
 
-    [SerializeField] private float oldLat = 0f;
-    [SerializeField] private float oldLon = 0f;
+    private float oldLat = 0f;
+    private float oldLon = 0f;
+    private float lat = 0f;
+    private float lon = 0f;
 
     void Start()
     {
-
+        GPS_UI = FindObjectOfType<UI_GPS_UPDATER>();
         GPSServ = FindObjectOfType<GPS>();
         Get(_label);
     }
 
     private void Update()
     {
-        float lat = GPSServ.lat;
-        float lon = GPSServ.lon;
+        lat = GPSServ.lat;
+        lon = GPSServ.lon;
 
         if (oldLat != lat || oldLon != lon)
             Get(_label);
@@ -45,20 +51,20 @@ public class LoadRemoteAssets : MonoBehaviour
 
     private async Task Get(string label)
     {
-        var locations = await Addressables.LoadResourceLocationsAsync(label).Task;
+        var landmarks = await Addressables.LoadResourceLocationsAsync(label).Task;
 
 
-        foreach (var location in locations)
+        foreach (var landmark in landmarks)
         {
-            if (!isNear.ContainsKey(location.ToString()))            
-                isNear[location.ToString()] = false;
+            if (!isNear.ContainsKey(landmark.ToString()))
+                isNear[landmark.ToString()] = false;
 
 
 
             //Debug.Log("Got location: " + location);
             //Debug.Log("Got Data: " + location.Data.ToString());
             Dictionary<string, string> args = new Dictionary<string, string>();
-            args.Add("loc", location.ToString());
+            args.Add("loc", landmark.ToString());
             args.Add("uid", SystemInfo.deviceUniqueIdentifier);
             int index = GPSServ.responses.Count;
             GPSServ.pingAPI("isNear", args);
@@ -74,25 +80,36 @@ public class LoadRemoteAssets : MonoBehaviour
             };
             //Debug.Log("Done Waiting:" + GPSServ.responses.Count+" index is:"+index);
             Debug.Log("Waiting done!");
-            string resp = GPSServ.responses[index].Trim(' ', '\n');
-            Debug.Log("Got resp:'" + resp + "'\t ==?" + (resp == "true").ToString());
+            string resp = GPSServ.responses[index];
+            Debug.Log("Got resp:'" + resp + "'");
 
             isNearResponse nresp = JsonUtility.FromJson<isNearResponse>(resp);
             Debug.Log("Got Nearness Response; isNear:" + nresp.near + " distance from landmark: " + nresp.distance);
 
-
-            if (nresp.near && isNear[location.ToString()] != nresp.near)
+            distances[landmark.ToString()] = nresp.distance;
+            distances.OrderBy(key => key.Value);
+            //GPS_UI.closest_landmark = distances.First().Value.ToString();
+            //GPS_UI.closest_landmark = "";
+            foreach(var v in distances.Values)
             {
-                
-                Debug.Log("Instantiating!");
-                isNear[location.ToString()] = nresp.near;
-                GameObject spawn = await Addressables.InstantiateAsync(location).Task;
-                spawned.Add(location.ToString(), spawn);
+                GPS_UI.closest_landmark += v.ToString();
+                GPS_UI.closest_landmark += " ";
             }
-            else if (!nresp.near && isNear[location.ToString()] != nresp.near)
+
+
+
+            if (nresp.near && isNear[landmark.ToString()] != nresp.near)
+            {
+
+                Debug.Log("Instantiating!");
+                isNear[landmark.ToString()] = nresp.near;
+                GameObject spawn = await Addressables.InstantiateAsync(landmark).Task;
+                spawned.Add(landmark.ToString(), spawn);
+            }
+            else if (!nresp.near && isNear[landmark.ToString()] != nresp.near)
             {
                 Debug.Log("removing!");
-                Destroy(spawned[location.ToString()]);
+                Destroy(spawned[landmark.ToString()]);
 
             }
             else
@@ -100,9 +117,10 @@ public class LoadRemoteAssets : MonoBehaviour
                 Debug.Log("Status not updated!");
             }
 
-            isNear[location.ToString()] = nresp.near;
+            isNear[landmark.ToString()] = nresp.near;
 
         }
+
     }
 
 

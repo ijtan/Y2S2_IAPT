@@ -8,6 +8,7 @@ public class UI_GPS_UPDATER : MonoBehaviour
 {
     //private GPS GPSService;
     private string lat,lon;
+    public string closest_landmark;
     public Text coords;
     // Start is called before the first frame update
     //void Start()
@@ -23,6 +24,7 @@ public class UI_GPS_UPDATER : MonoBehaviour
     {
         lat = GPS.Instance.lat.ToString();
         lon = GPS.Instance.lon.ToString();
-        coords.text = "Lat: " + lat + "\nLon:" + lon;
+        //clos = GPS.Instance.closest.ToString();
+        coords.text = "Lat: " + lat + "\nLon:" + lon+"\nClosest: " + closest_landmark;
     }
 }

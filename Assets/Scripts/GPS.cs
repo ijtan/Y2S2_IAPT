@@ -16,6 +16,7 @@ public class GPS : MonoBehaviour
 
     //int index = 0;
     public List<string> responses;
+    public float closest;
 
     public static GPS Instance { set; get; }
     // Start is called before the first frame update
