@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LandmarkEntry : MonoBehaviour
@@ -16,6 +17,7 @@ public class LandmarkEntry : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GetComponent<Button>().interactable = false;
         Debug.Log("New Entry Instantiated, name is: " + Name);
         dirArrow = GetComponentInChildren<DirectionArrowManager>();
         landmarkNameUI =  GetComponentInChildren<TextMeshProUGUI>();
@@ -37,10 +39,17 @@ public class LandmarkEntry : MonoBehaviour
         if (activated)
         {
             dirArrow.activate();
+            GetComponent<Button>().interactable = true;
         }
         else
         {
             dirArrow.deactivate();
+            GetComponent<Button>().interactable = false;
         }
+    }
+
+    public void ArMode()
+    {
+        SceneManager.LoadScene("ArMode");
     }
 }

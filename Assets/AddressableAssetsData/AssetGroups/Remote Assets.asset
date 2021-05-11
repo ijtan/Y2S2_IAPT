@@ -24,6 +24,13 @@ MonoBehaviour:
     - remote
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
+  - m_GUID: e45a9c223188ab840bb014d2b3a9670e
+    m_Address: Assets/Prefabs/3D Objects/starbucks_addr.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: f88831389c694ce4f9f3721d2cbb6cff, type: 2}
   m_SchemaSet:

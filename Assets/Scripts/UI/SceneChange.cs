@@ -9,7 +9,7 @@ public class SceneChange : MonoBehaviour
 
     public void Start()
     {
-        DontDestroyOnLoad(this.gameObject);
+        //DontDestroyOnLoad(this.gameObject);
     }
     public void Update()
     {
@@ -19,25 +19,34 @@ public class SceneChange : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
 
-            MainMenu();
+            ListLandsScene();
         }
 
     }
 
-    public void GPS_Scene()
+    //public void GPS_Scene()
+    //{
+    //    SceneManager.LoadScene("GPS");
+    //}
+    //public void AR_Scene()
+    //{
+    //    SceneManager.LoadScene("PlaneTrack");
+    //}
+    //public void IR_Scene()
+    //{
+    //    SceneManager.LoadScene("MultiImageTrack");
+    //}
+    //public void MainMenu()
+    //{
+    //    SceneManager.LoadScene("MainMenu");
+    //}
+
+    public void ListLandsScene()
     {
-        SceneManager.LoadScene("GPS");
+        SceneManager.LoadScene("ClosePointsView");
     }
-    public void AR_Scene()
+    public void ArMode()
     {
-        SceneManager.LoadScene("PlaneTrack");
-    }
-    public void IR_Scene()
-    {
-        SceneManager.LoadScene("MultiImageTrack");
-    }
-    public void MainMenu()
-    {
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("ArMode");
     }
 }
