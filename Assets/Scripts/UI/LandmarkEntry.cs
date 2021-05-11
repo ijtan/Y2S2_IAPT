@@ -9,6 +9,7 @@ public class LandmarkEntry : MonoBehaviour
     public string Name;
     public DirectionArrowManager dirArrow;
     public TextMeshPro landmarkNameUI;
+    
 
     public bool activated = false;
     // Start is called before the first frame update
@@ -20,7 +21,9 @@ public class LandmarkEntry : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {   
+    {
+        activated = GPS.Instance.nearLandmarks[Name];
+        dirArrow.currentLocation = GPS.Instance.landmarkLocations[Name];
 
         landmarkNameUI.text = Name;
         if (activated)

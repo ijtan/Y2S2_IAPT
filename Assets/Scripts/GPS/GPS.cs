@@ -30,6 +30,8 @@ public class GPS : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
+
 #if PLATFORM_ANDROID
         if (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
         {
@@ -41,6 +43,7 @@ public class GPS : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         StartCoroutine(StartLocServ());
         StartCoroutine(updateGPS());
+        //updateLandmarksFromApi();
     }
 
     private IEnumerator StartLocServ()
@@ -114,7 +117,6 @@ public class GPS : MonoBehaviour
     //            GPS_UI.closest_landmark = distances.First().Value.ToString();
     //            GPS_UI.isNear = nresp.near.ToString();
 
-    [Obsolete]
     public IEnumerator updateGPS()
     {
         if (!Input.location.isEnabledByUser)
@@ -139,12 +141,12 @@ public class GPS : MonoBehaviour
                 args.Add("uid", SystemInfo.deviceUniqueIdentifier);
                 api.pingAPI("getNear", args);
 
-                Get();
+                updateLandmarksFromApi();
             }
         }
     }
 
-    private async Task Get()
+    private async Task updateLandmarksFromApi()
     {
         var landmarks = await Addressables.LoadResourceLocationsAsync(_label).Task;
 
@@ -155,72 +157,37 @@ public class GPS : MonoBehaviour
                 nearLandmarks[landmark.ToString()] = false;
 
 
-
-            //Debug.Log("Got location: " + location);
-            //Debug.Log("Got Data: " + location.Data.ToString());
             Dictionary<string, string> args = new Dictionary<string, string>();
-            args.Add("loc", );
+            args.Add("loc", landmark.ToString());
             args.Add("uid", SystemInfo.deviceUniqueIdentifier);
             int index = api.counter;
             api.pingAPI("isNear", args);
+
+
             int count = 0;
-            while (api.responses.Count <= index)
+            while (api.counter <= index)
             {
                 await Task.Delay(10);
-                //Debug.Log("Waiting:" + GPSServ.responses.Count + " index is:" + index);
+
                 count++;
                 if (count > 100)
                     break;
-                //Debug.Log(GPSServ.responses.Count <= index);
+
             };
-            //Debug.Log("Done Waiting:" + GPSServ.responses.Count+" index is:"+index);
-            Debug.Log("Waiting done!");
+
             string resp = api.responses[index];
             Debug.Log("Got resp:'" + resp + "'");
             landmarkPingResponse nresp = new landmarkPingResponse();
             nresp = JsonUtility.FromJson<landmarkPingResponse>(resp);
-            Debug.Log("Got Nearness Response; isNear:" + nresp.near + " distance from landmark: " + nresp.distance);
+            Debug.Log("Parsed; isNear:" + nresp.near + " landmark loc: (" + nresp.locX + "," + nresp.locY + ") distance: " + nresp.distance);
 
-            //distances[landmark.ToString()] = nresp.distance;
-            //distances.OrderBy(key => key.Value);
-            //GPS_UI.closest_landmark = distances.First().Value.ToString();
-            //GPS_UI.isNear = nresp.near.ToString();
+
             landmarkLocations[landmark.ToString()] = new Vector2(nresp.locX, nresp.locY);
             nearLandmarks[landmark.ToString()] = nresp.near;
-
-
-            //if (nresp.near && nearLandmarks[landmark.ToString()] != nresp.near)
-            //{
-
-            //    Debug.Log("Instantiating!");
-            //    nearLandmarks[landmark.ToString()] = nresp.near;
-            //    GameObject spawn = await Addressables.InstantiateAsync(landmark).Task;
-            //    spawned.Add(landmark.ToString(), spawn);
-            //}
-            //else if (!nresp.near && nearLandmarks[landmark.ToString()] != nresp.near)
-            //{
-            //    Debug.Log("removing!");
-            //    Destroy(spawned[landmark.ToString()]);
-
-            //}
-            //else
-            //{
-            //    Debug.Log("Status not updated!");
-            //}
-
-            //nearLandmarks[landmark.ToString()] = nresp.near;
 
         }
 
     }
-
-
-
-    //// Update is called once per frame
-    //void Update()
-    //{
-
-    //}
 }
 
 
