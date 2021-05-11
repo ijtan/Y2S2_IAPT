@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Android;
-using UnityEngine.Apple.TV;
 using UnityEngine.Networking;
 
 public class GPS : MonoBehaviour
 {
-    [SerializeField] private string _label;
+    [SerializeField] private string _label = "remote";
     public float lat;
     public float lon;
     public float UPDATE_TIME = 1f;
@@ -30,7 +29,7 @@ public class GPS : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
 
 #if PLATFORM_ANDROID
         if (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
@@ -39,27 +38,31 @@ public class GPS : MonoBehaviour
         }
 #endif
 
+        Debug.Log("Starting GPS!");
+        api = FindObjectOfType<Web_Pinger>();
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        updateLandmarksFromApi();
         StartCoroutine(StartLocServ());
         StartCoroutine(updateGPS());
-        //updateLandmarksFromApi();
+        
     }
 
     private IEnumerator StartLocServ()
     {
-        if (!Input.location.isEnabledByUser)
-        {
-            Debug.LogError("Location (GPS) not enabled by user!");
-            yield break;
-        }
+        //if (!Input.location.isEnabledByUser)
+        //{
+        //    Debug.LogError("Location (GPS) not enabled by user!");
+        //    yield break;
+        //}
 
         Input.location.Start();
-        int maxWait = 20;
+        int maxWait = 40;
 
         while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5f);
             maxWait--;
         }
 
@@ -148,13 +151,18 @@ public class GPS : MonoBehaviour
 
     private async Task updateLandmarksFromApi()
     {
+        Debug.Log("Updating Landmarks From Api Start!");
         var landmarks = await Addressables.LoadResourceLocationsAsync(_label).Task;
+        Debug.Log("Got resource locations!");
 
 
         foreach (var landmark in landmarks)
         {
             if (!nearLandmarks.ContainsKey(landmark.ToString()))
                 nearLandmarks[landmark.ToString()] = false;
+            if (!landmarkLocations.ContainsKey(landmark.ToString()))
+                landmarkLocations[landmark.ToString()] = new Vector2(0, 0);
+            Debug.Log("Pinging for: "+ landmark.ToString());
 
 
             Dictionary<string, string> args = new Dictionary<string, string>();
@@ -165,13 +173,17 @@ public class GPS : MonoBehaviour
 
 
             int count = 0;
-            while (api.counter <= index)
+            while (api.responses.Count <= index)
             {
                 await Task.Delay(10);
 
                 count++;
                 if (count > 100)
+                {
+                    Debug.LogError("GPS Nearity Ping Timed out!");
                     break;
+                }
+
 
             };
 

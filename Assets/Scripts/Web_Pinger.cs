@@ -13,10 +13,10 @@ public class Web_Pinger : MonoBehaviour
     public List<string> responses;
     public int counter = 0;
     //// Start is called before the first frame update
-    //void Start()
-    //{
-
-    //}
+    void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
 
     //// Update is called once per frame
     //void Update()
@@ -30,6 +30,7 @@ public class Web_Pinger : MonoBehaviour
 
         
         string urlToPing = host + ':' + port + '/' + page;
+        Debug.Log("Recieved Ping Request: " + urlToPing);
         if (args != null)
         {
 

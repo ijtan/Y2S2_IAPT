@@ -5,9 +5,12 @@ using UnityEngine;
 public class DirectionArrowManager : MonoBehaviour
 {
     public string distanceText;
-    private TextMeshPro distanceTextObject;
+    private TextMeshProUGUI distanceTextObject;
 
-    private bool activated = false;
+    private RectTransform arrow;
+
+    public bool activated = false;
+    public float rotateSpeedWhenActive = 30f;
 
     public Vector2 landmarkLocation;
     public Vector2 currentLocation;
@@ -15,14 +18,26 @@ public class DirectionArrowManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        distanceTextObject = GetComponentInChildren<TextMeshPro>();
+        distanceTextObject = GetComponentInChildren<TextMeshProUGUI>();
+
+
+        foreach (Transform child in this.transform)
+        {
+            if (child.tag == "DirectionArrowImage")
+            {
+                arrow = child.gameObject.GetComponent<RectTransform>();
+                break;
+            }
+                
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        float offset = 90;
         string unit = "m";
-        distance = CalculateDistance(currentLocation.x, currentLocation.y, landmarkLocation.x, landmarkLocation.y);
+        distance = CalculateDistance(currentLocation.x, landmarkLocation.x, currentLocation.y, landmarkLocation.y);
         if (distance > 1000)
         {
             distance /= 1000;
@@ -32,9 +47,16 @@ public class DirectionArrowManager : MonoBehaviour
         distanceText = distance.ToString() + unit;
         distanceTextObject.text = distanceText;
 
-        float bearing = angleFromCoordinate(currentLocation.x, currentLocation.y, landmarkLocation.x, landmarkLocation.y);
+        if (!activated)
+        {
+            float bearing = angleFromCoordinate(currentLocation.x, currentLocation.y, landmarkLocation.x, landmarkLocation.y);
 
-        this.gameObject.transform.rotation = Quaternion.Slerp(this.gameObject.transform.rotation, Quaternion.Euler(0, 0, Input.compass.magneticHeading + bearing), 100f);
+            arrow.rotation = Quaternion.Slerp(arrow.rotation, Quaternion.Euler(0, 0, Input.compass.magneticHeading + bearing+ offset), 100f);
+        }
+        else
+        {
+            arrow.rotation *= Quaternion.Euler(0, 0, rotateSpeedWhenActive);
+        }
     }
 
 
