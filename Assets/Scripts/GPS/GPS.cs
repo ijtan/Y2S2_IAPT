@@ -41,42 +41,47 @@ public class GPS : MonoBehaviour
 #endif
 
         Debug.Log("Starting GPS!");
-        showToast("GPS Object start", 2);
+        StartCoroutine(StartLocServ());
+
+        //showToast("GPS Object start", 2);
         api = FindObjectOfType<Web_Pinger>();
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        //Debug.Log("Starting Gps Service");
+        //showToast("Starting Gps Service", 2);
 
-        showToast("Starting Gps Service", 2);
-        StartCoroutine(StartLocServ());
-
-        StartCoroutine(updateGPS());
-        //updateLandmarksFromApi();
 
     }
 
-    private IEnumerator StartLocServ()
+    public IEnumerator StartLocServ()
     {
-        //if (!Input.location.isEnabledByUser)
-        //{
-        //    Debug.LogError("Location (GPS) not enabled by user!");
-        //    yield break;
-        //}
+        if (!Input.location.isEnabledByUser)
+        {
+            showToast("GPS not enabled by user! ", 2);
+            Debug.LogError("Location (GPS) not enabled by user!");
+            yield return new WaitForSeconds(3);
+        }
         showToast("Pre Gps Start", 2);
         Input.location.Start();
-        int maxWait = 40;
-        showToast("Starting GPS Wait", 2);
+
+
+        int maxWait = 20;
+        showToast("Starting GPS Wait: ", 2);
+        Debug.Log("Pre wait" + Input.location.status.ToString());
         while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
         {
-            yield return new WaitForSeconds(0.5f);
+            Debug.Log("Waiting: " + Input.location.status.ToString());
+            showToast(("Waiting... "+maxWait.ToString()+" st:"+ Input.location.status.ToString()), 1);            
             maxWait--;
+            yield return new WaitForSeconds(1f);
         }
 
         if (maxWait <= 0)
         {
             Debug.LogError("GPS timed out!");
-            showToast("GPS Timed out", 2);
+            showToast(("GPS Timed out" + maxWait.ToString() + " st:" + Input.location.status.ToString()), 2);
             yield break;
         }
 
@@ -86,17 +91,17 @@ public class GPS : MonoBehaviour
             showToast("Unable to determine device location!", 2);
             yield break;
         }
-
-        if (Input.location.status != LocationServiceStatus.Running)
+        else
         {
-            Debug.LogError("Not Running!");
-            showToast("Not running!", 2);
+            showToast(("Done! st=" + Input.location.status.ToString()), 2);
+            showToast(("Done! mw=" + maxWait.ToString()), 2);
+            lat = Input.location.lastData.latitude;
+            lon = Input.location.lastData.longitude;
+            StartCoroutine(updateGPS());
             yield break;
         }
-        lat = Input.location.lastData.latitude;
-        lon = Input.location.lastData.longitude;
 
-        yield break;
+        showToast(("out of everything!! st=" + Input.location.status.ToString() + " mw = " + maxWait.ToString()), 2);
 
     }
 
@@ -139,11 +144,11 @@ public class GPS : MonoBehaviour
     {
         if (!Input.location.isEnabledByUser)
         {
-            Debug.Log("User has not enabled GPS");
-            yield break;
+            Debug.Log("in update: User has not enabled GPS");
+            yield return new WaitForSeconds(3);
         }
 
-
+        showToast("Updating GPS", 1);
         WaitForSeconds updateTime = new WaitForSeconds(UPDATE_TIME);
         while (true)
         {
@@ -162,11 +167,16 @@ public class GPS : MonoBehaviour
 
                 updateLandmarksFromApi();
             }
+
+            lon = newlon;
+            lat = newlat;
+            yield return updateTime;
         }
     }
 
     private async Task updateLandmarksFromApi()
     {
+        showToast("Updating Landmarks from API!", 2);
         Debug.Log("Updating Landmarks From Api Start!");
         var landmarks = await Addressables.LoadResourceLocationsAsync(_label).Task;
         Debug.Log("Got resource locations!");
