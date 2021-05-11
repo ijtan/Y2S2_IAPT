@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Android;
@@ -21,6 +22,9 @@ public class GPS : MonoBehaviour
 
     public Dictionary<string, bool> nearLandmarks = new Dictionary<string, bool>();
     public Dictionary<string, Vector2> landmarkLocations = new Dictionary<string, Vector2>();
+
+    private Dictionary<string, GameObject> spawned = new Dictionary<string, GameObject>();
+
 
     public static GPS Instance { set; get; }
     // Start is called before the first frame update
@@ -135,51 +139,80 @@ public class GPS : MonoBehaviour
                 args.Add("uid", SystemInfo.deviceUniqueIdentifier);
                 api.pingAPI("getNear", args);
 
-                var remote = Addressables.LoadResourceLocations(_label).Task;
-                foreach (var lmName in remote)
-                {
-                    args.Clear();
-                    //args.Add("lat", newlat.ToString());
-                    args.Add("loc", lmName.ToString());
-                    args.Add("uid", SystemInfo.deviceUniqueIdentifier);
-                    int index = api.counter;
-                    api.pingAPI("isNear", args);
-
-                    int count = 0;
-                    while (api.responses.Count <= index)
-                    {
-                        yield return new WaitForSeconds(0.01f);
-                        //Debug.Log("Waiting:" + GPSServ.responses.Count + " index is:" + index);
-                        count++;
-                        if (count > 100)
-                            break;
-                        //Debug.Log(GPSServ.responses.Count <= index);
-                    };
-                    //Debug.Log("Done Waiting:" + GPSServ.responses.Count+" index is:"+index);
-                    Debug.Log("Waiting done!");
-                    string resp = api.responses[index];
-                    Debug.Log("Got resp:'" + resp + "'");
-                    landmarkPingResponse nresp = new landmarkPingResponse();
-                    nresp = JsonUtility.FromJson<landmarkPingResponse>(resp);
-                    Debug.Log("Got Nearness Response; isNear:" + nresp.near);
-
-                    //landmarkLocations[lmName.ToString()] = nresp.distance;
-                    //landmarkLocations.OrderBy(key => key.Value);
-
-
-                    landmarkLocations[lmName] = new Vector2(nresp.locX, nresp.locY);
-                    nearLandmarks[lmName] = nresp.near;
-                }
+                Get();
             }
-
-            lon = newlon;
-            lat = newlat;
-
-
-            yield return updateTime;
         }
     }
 
+    private async Task Get()
+    {
+        var landmarks = await Addressables.LoadResourceLocationsAsync(_label).Task;
+
+
+        foreach (var landmark in landmarks)
+        {
+            if (!nearLandmarks.ContainsKey(landmark.ToString()))
+                nearLandmarks[landmark.ToString()] = false;
+
+
+
+            //Debug.Log("Got location: " + location);
+            //Debug.Log("Got Data: " + location.Data.ToString());
+            Dictionary<string, string> args = new Dictionary<string, string>();
+            args.Add("loc", );
+            args.Add("uid", SystemInfo.deviceUniqueIdentifier);
+            int index = api.counter;
+            api.pingAPI("isNear", args);
+            int count = 0;
+            while (api.responses.Count <= index)
+            {
+                await Task.Delay(10);
+                //Debug.Log("Waiting:" + GPSServ.responses.Count + " index is:" + index);
+                count++;
+                if (count > 100)
+                    break;
+                //Debug.Log(GPSServ.responses.Count <= index);
+            };
+            //Debug.Log("Done Waiting:" + GPSServ.responses.Count+" index is:"+index);
+            Debug.Log("Waiting done!");
+            string resp = api.responses[index];
+            Debug.Log("Got resp:'" + resp + "'");
+            landmarkPingResponse nresp = new landmarkPingResponse();
+            nresp = JsonUtility.FromJson<landmarkPingResponse>(resp);
+            Debug.Log("Got Nearness Response; isNear:" + nresp.near + " distance from landmark: " + nresp.distance);
+
+            //distances[landmark.ToString()] = nresp.distance;
+            //distances.OrderBy(key => key.Value);
+            //GPS_UI.closest_landmark = distances.First().Value.ToString();
+            //GPS_UI.isNear = nresp.near.ToString();
+            landmarkLocations[landmark.ToString()] = new Vector2(nresp.locX, nresp.locY);
+            nearLandmarks[landmark.ToString()] = nresp.near;
+
+
+            //if (nresp.near && nearLandmarks[landmark.ToString()] != nresp.near)
+            //{
+
+            //    Debug.Log("Instantiating!");
+            //    nearLandmarks[landmark.ToString()] = nresp.near;
+            //    GameObject spawn = await Addressables.InstantiateAsync(landmark).Task;
+            //    spawned.Add(landmark.ToString(), spawn);
+            //}
+            //else if (!nresp.near && nearLandmarks[landmark.ToString()] != nresp.near)
+            //{
+            //    Debug.Log("removing!");
+            //    Destroy(spawned[landmark.ToString()]);
+
+            //}
+            //else
+            //{
+            //    Debug.Log("Status not updated!");
+            //}
+
+            //nearLandmarks[landmark.ToString()] = nresp.near;
+
+        }
+
+    }
 
 
 
@@ -189,3 +222,6 @@ public class GPS : MonoBehaviour
 
     //}
 }
+
+
+
