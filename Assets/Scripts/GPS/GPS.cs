@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Android;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class GPS : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class GPS : MonoBehaviour
     public float lat;
     public float lon;
     public float UPDATE_TIME = 1f;
+    public Text txt;
 
     private Web_Pinger api;
 
@@ -39,14 +41,19 @@ public class GPS : MonoBehaviour
 #endif
 
         Debug.Log("Starting GPS!");
+        showToast("GPS Object start", 2);
         api = FindObjectOfType<Web_Pinger>();
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        updateLandmarksFromApi();
+
+
+        showToast("Starting Gps Service", 2);
         StartCoroutine(StartLocServ());
+
         StartCoroutine(updateGPS());
-        
+        //updateLandmarksFromApi();
+
     }
 
     private IEnumerator StartLocServ()
@@ -56,10 +63,10 @@ public class GPS : MonoBehaviour
         //    Debug.LogError("Location (GPS) not enabled by user!");
         //    yield break;
         //}
-
+        showToast("Pre Gps Start", 2);
         Input.location.Start();
         int maxWait = 40;
-
+        showToast("Starting GPS Wait", 2);
         while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
         {
             yield return new WaitForSeconds(0.5f);
@@ -69,15 +76,23 @@ public class GPS : MonoBehaviour
         if (maxWait <= 0)
         {
             Debug.LogError("GPS timed out!");
+            showToast("GPS Timed out", 2);
             yield break;
         }
 
         if (Input.location.status == LocationServiceStatus.Failed)
         {
             Debug.LogError("Unable to determine device location!");
+            showToast("Unable to determine device location!", 2);
             yield break;
         }
 
+        if (Input.location.status != LocationServiceStatus.Running)
+        {
+            Debug.LogError("Not Running!");
+            showToast("Not running!", 2);
+            yield break;
+        }
         lat = Input.location.lastData.latitude;
         lon = Input.location.lastData.longitude;
 
@@ -138,6 +153,7 @@ public class GPS : MonoBehaviour
 
             if (newlon != lon || newlat != lat)
             {
+                showToast("Pos change!!", 2);
                 Dictionary<string, string> args = new Dictionary<string, string>();
                 args.Add("lat", newlat.ToString());
                 args.Add("lon", newlon.ToString());
@@ -162,7 +178,7 @@ public class GPS : MonoBehaviour
                 nearLandmarks[landmark.ToString()] = false;
             if (!landmarkLocations.ContainsKey(landmark.ToString()))
                 landmarkLocations[landmark.ToString()] = new Vector2(0, 0);
-            Debug.Log("Pinging for: "+ landmark.ToString());
+            Debug.Log("Pinging for: " + landmark.ToString());
 
 
             Dictionary<string, string> args = new Dictionary<string, string>();
@@ -198,9 +214,76 @@ public class GPS : MonoBehaviour
             nearLandmarks[landmark.ToString()] = nresp.near;
 
         }
-
     }
+
+
+
+
+
+    void showToast(string text,
+        int duration)
+    {
+        StartCoroutine(showToastCOR(text, duration));
+    }
+
+    private IEnumerator showToastCOR(string text,
+        int duration)
+    {
+        Color orginalColor = txt.color;
+
+        txt.text = text;
+        txt.enabled = true;
+
+        //Fade in
+        yield return fadeInAndOut(txt, true, 0.5f);
+
+        //Wait for the duration
+        float counter = 0;
+        while (counter < duration)
+        {
+            counter += Time.deltaTime;
+            yield return null;
+        }
+
+        //Fade out
+        yield return fadeInAndOut(txt, false, 0.5f);
+
+        txt.enabled = false;
+        txt.color = orginalColor;
+    }
+
+    IEnumerator fadeInAndOut(Text targetText, bool fadeIn, float duration)
+    {
+        //Set Values depending on if fadeIn or fadeOut
+        float a, b;
+        if (fadeIn)
+        {
+            a = 0f;
+            b = 1f;
+        }
+        else
+        {
+            a = 1f;
+            b = 0f;
+        }
+
+        Color currentColor = Color.clear;
+        float counter = 0f;
+
+        while (counter < duration)
+        {
+            counter += Time.deltaTime;
+            float alpha = Mathf.Lerp(a, b, counter / duration);
+
+            targetText.color = new Color(currentColor.r, currentColor.g, currentColor.b, alpha);
+            yield return null;
+        }
+    }
+
 }
+
+
+
 
 
 
