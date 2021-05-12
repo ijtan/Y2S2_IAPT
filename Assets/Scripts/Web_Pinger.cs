@@ -12,10 +12,28 @@ public class Web_Pinger : MonoBehaviour
     public string port = "5000";
     public List<string> responses;
     public int counter = 0;
-    //// Start is called before the first frame update
+
+    private static Web_Pinger _instance;
+    public static Web_Pinger Instance { get { return _instance; } }
+    // Start is called before the first frame update
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
+
+
+    // Start is called before the first frame update
     void Start()
     {
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     //// Update is called once per frame

@@ -35,7 +35,7 @@ public class GPS : MonoBehaviour
     public float UPDATE_TIME = 1f;
     public Text txt;
 
-    private Web_Pinger api;
+    //private Web_Pinger api;
 
     public float closest;
 
@@ -45,12 +45,24 @@ public class GPS : MonoBehaviour
 
     //private Dictionary<string, GameObject> spawned = new Dictionary<string, GameObject>();
 
-
-    public static GPS Instance { set; get; }
+    private static GPS _instance;
+    public static GPS Instance { get { return _instance; } }
     // Start is called before the first frame update
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
     void Start()
     {
-        api = FindObjectOfType<Web_Pinger>();
+        //api = FindObjectOfType<Web_Pinger>();
         //updateLandmarksFromApi();
 
 
@@ -67,8 +79,8 @@ public class GPS : MonoBehaviour
         //showToast("GPS Object start", 2);
         
 
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+        //Instance = this;
+        //DontDestroyOnLoad(gameObject);
 
         //Debug.Log("Starting Gps Service");
         //showToast("Starting Gps Service", 2);
@@ -131,10 +143,10 @@ public class GPS : MonoBehaviour
 
 
 
-    //    int index = api.counter;
-    //    api.pingAPI("isNear", args);
+    //    int index = Web_Pinger.Instance.counter;
+    //    Web_Pinger.Instance.pingAPI("isNear", args);
     //            int count = 0;
-    //            while (api.responses.Count <= index)
+    //            while (Web_Pinger.Instance.responses.Count <= index)
     //            {
     //                await Task.Delay(10);
     //    //Debug.Log("Waiting:" + GPSServ.responses.Count + " index is:" + index);
@@ -145,7 +157,7 @@ public class GPS : MonoBehaviour
     //            };
     ////Debug.Log("Done Waiting:" + GPSServ.responses.Count+" index is:"+index);
     //Debug.Log("Waiting done!");
-    //            string resp = api.responses[index];
+    //            string resp = Web_Pinger.Instance.responses[index];
     //Debug.Log("Got resp:'" + resp + "'");
     //            isNearResponse nresp = new isNearResponse();
     //nresp = JsonUtility.FromJson<isNearResponse>(resp);
@@ -180,7 +192,7 @@ public class GPS : MonoBehaviour
                 args.Add("lat", newlat.ToString());
                 args.Add("lon", newlon.ToString());
                 args.Add("uid", SystemInfo.deviceUniqueIdentifier);
-                api.pingAPI("getNear", args);
+                Web_Pinger.Instance.pingAPI("getNear", args);
 
                 updateLandmarksFromApi();
             }
@@ -199,12 +211,12 @@ public class GPS : MonoBehaviour
   
 
 
-        int index = api.counter;
-        api.pingAPI("getKeys", new Dictionary<string, string>());
+        int index = Web_Pinger.Instance.counter;
+        Web_Pinger.Instance.pingAPI("getKeys", new Dictionary<string, string>());
 
 
         int count = 0;
-        while (api.responses.Count <= index)
+        while (Web_Pinger.Instance.responses.Count <= index)
         {
             await Task.Delay(10);
 
@@ -219,7 +231,7 @@ public class GPS : MonoBehaviour
         };
         string[] landmarks;
         Debug.Log("Got resource locations!");
-        string resp = api.responses[index];
+        string resp = Web_Pinger.Instance.responses[index];
         landmarks = JsonUtility.FromJson<landmark_list>(resp).landmarks;
         Debug.Log("Got entries:" + landmarks.ToString());
         //showToast(("Got " + landmarks.Length + " Entries!"), 2);
@@ -236,12 +248,12 @@ public class GPS : MonoBehaviour
             Dictionary<string, string> args = new Dictionary<string, string>();
             args.Add("loc", landmark.ToString());
             args.Add("uid", SystemInfo.deviceUniqueIdentifier);
-            index = api.counter;
-            api.pingAPI("isNear", args);
+            index = Web_Pinger.Instance.counter;
+            Web_Pinger.Instance.pingAPI("isNear", args);
 
 
             count = 0;
-            while (api.responses.Count <= index)
+            while (Web_Pinger.Instance.responses.Count <= index)
             {
                 await Task.Delay(10);
 
@@ -255,7 +267,7 @@ public class GPS : MonoBehaviour
 
             };
 
-            resp = api.responses[index];
+            resp = Web_Pinger.Instance.responses[index];
             Debug.Log("Got resp:'" + resp + "'");
             landmark_info nresp = new landmark_info();
             nresp = JsonUtility.FromJson<landmark_info>(resp);

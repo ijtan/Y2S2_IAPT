@@ -35,7 +35,7 @@ public class LandmarkListManager : MonoBehaviour
     //    {
     //        Debug.Log("Refreshing Landmarks!");
     //    }
-    }
+    //}
 
 
 

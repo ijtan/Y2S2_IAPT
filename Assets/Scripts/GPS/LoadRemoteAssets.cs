@@ -13,7 +13,7 @@ public class LoadRemoteAssets : MonoBehaviour
     [SerializeField] private string _label;
 
     private GPS GPSServ;
-    private Web_Pinger api;
+    //private Web_Pinger api;
     private UI_GPS_UPDATER GPS_UI;
     private Dictionary<string, bool> isNear = new Dictionary<string, bool>();
     private Dictionary<string, float> distances = new Dictionary<string, float>();
@@ -29,7 +29,7 @@ public class LoadRemoteAssets : MonoBehaviour
     {
         GPS_UI = FindObjectOfType<UI_GPS_UPDATER>();
         GPSServ = FindObjectOfType<GPS>();
-        api = FindObjectOfType<Web_Pinger>();
+        //api = FindObjectOfType<Web_Pinger>();
         Get(_label);
     }
 
@@ -68,10 +68,10 @@ public class LoadRemoteAssets : MonoBehaviour
             Dictionary<string, string> args = new Dictionary<string, string>();
             args.Add("loc", landmark.ToString());
             args.Add("uid", SystemInfo.deviceUniqueIdentifier);
-            int index = api.counter;
-            api.pingAPI("isNear", args);
+            int index = Web_Pinger.Instance.counter;
+            Web_Pinger.Instance.pingAPI("isNear", args);
             int count = 0;
-            while (api.responses.Count <= index)
+            while (Web_Pinger.Instance.responses.Count <= index)
             {
                 await Task.Delay(10);
                 //Debug.Log("Waiting:" + GPSServ.responses.Count + " index is:" + index);
@@ -82,7 +82,7 @@ public class LoadRemoteAssets : MonoBehaviour
             };
             //Debug.Log("Done Waiting:" + GPSServ.responses.Count+" index is:"+index);
             Debug.Log("Waiting done!");
-            string resp = api.responses[index];
+            string resp = Web_Pinger.Instance.responses[index];
             Debug.Log("Got resp:'" + resp + "'");
             isNearResponse nresp = new isNearResponse();
             nresp = JsonUtility.FromJson<isNearResponse>(resp);
