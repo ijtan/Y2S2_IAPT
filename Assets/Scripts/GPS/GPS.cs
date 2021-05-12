@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -8,6 +9,23 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.Android;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+
+public class landmark_info
+{
+    //Vector2 location = new Vector2();
+    public bool near = false;
+    public float locX = 0;
+    public float locY = 0;
+    public float distance = 0;
+    public string title = "";
+    public string description = "";
+    public string image_url = "";
+}
+
+public class landmark_list
+{
+    public string[] landmarks;
+}
 
 public class GPS : MonoBehaviour
 {
@@ -25,13 +43,15 @@ public class GPS : MonoBehaviour
     //public Dictionary<string, Vector2> landmarkLocations = new Dictionary<string, Vector2>();
     public Dictionary<string, landmark_info> landmarks_data = new Dictionary<string, landmark_info>();
 
-    private Dictionary<string, GameObject> spawned = new Dictionary<string, GameObject>();
+    //private Dictionary<string, GameObject> spawned = new Dictionary<string, GameObject>();
 
 
     public static GPS Instance { set; get; }
     // Start is called before the first frame update
     void Start()
     {
+        api = FindObjectOfType<Web_Pinger>();
+        //updateLandmarksFromApi();
 
 
 #if PLATFORM_ANDROID
@@ -45,7 +65,7 @@ public class GPS : MonoBehaviour
         StartCoroutine(StartLocServ());
 
         //showToast("GPS Object start", 2);
-        api = FindObjectOfType<Web_Pinger>();
+        
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
@@ -64,17 +84,18 @@ public class GPS : MonoBehaviour
             Debug.LogError("Location (GPS) not enabled by user!");
             yield return new WaitForSeconds(3);
         }
-        showToast("Pre Gps Start", 2);
+        //showToast("Pre Gps Start", 2);
         Input.location.Start();
 
 
         int maxWait = 20;
-        showToast("Starting GPS Wait: ", 2);
+        //showToast("Starting GPS Wait: ", 2);
         Debug.Log("Pre wait" + Input.location.status.ToString());
         while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
         {
             Debug.Log("Waiting: " + Input.location.status.ToString());
-            showToast(("Waiting... "+maxWait.ToString()+" st:"+ Input.location.status.ToString()), 1);            
+            //showToast(("Waiting... " + maxWait.ToString() + " st:" + Input.location.status.ToString()), 1);
+            showToast(("Waiting for GPS... "),1);
             maxWait--;
             yield return new WaitForSeconds(1f);
         }
@@ -94,8 +115,9 @@ public class GPS : MonoBehaviour
         }
         else
         {
-            showToast(("Done! st=" + Input.location.status.ToString()), 2);
-            showToast(("Done! mw=" + maxWait.ToString()), 2);
+            //showToast(("Done! st=" + Input.location.status.ToString()), 2);
+            //showToast(("Done! mw=" + maxWait.ToString()), 2);
+            showToast(("GPS Connected"), 1);
             lat = Input.location.lastData.latitude;
             lon = Input.location.lastData.longitude;
             StartCoroutine(updateGPS());
@@ -106,18 +128,8 @@ public class GPS : MonoBehaviour
 
     }
 
-    public class landmark_info
-    {
-        //Vector2 location = new Vector2();
-        public bool near = false;
-        public float locX;
-        public float locY;
-        public float distance;
-        public string title;
-        public string description;
-        public string image_url;
 
-    }
+
 
     //    int index = api.counter;
     //    api.pingAPI("isNear", args);
@@ -151,8 +163,9 @@ public class GPS : MonoBehaviour
             Debug.Log("in update: User has not enabled GPS");
             yield return new WaitForSeconds(3);
         }
+        updateLandmarksFromApi();
 
-        showToast("Updating GPS", 1);
+        showToast("Updating GPS Location...", 1);
         WaitForSeconds updateTime = new WaitForSeconds(UPDATE_TIME);
         while (true)
         {
@@ -182,27 +195,52 @@ public class GPS : MonoBehaviour
     {
         showToast("Updating Landmarks from API!", 2);
         Debug.Log("Updating Landmarks From Api Start!");
-        var landmarks = await Addressables.LoadResourceLocationsAsync(_label).Task;
+        //var landmarks = await Addressables.LoadResourceLocationsAsync(_label).Task;
+  
+
+
+        int index = api.counter;
+        api.pingAPI("getKeys", new Dictionary<string, string>());
+
+
+        int count = 0;
+        while (api.responses.Count <= index)
+        {
+            await Task.Delay(10);
+
+            count++;
+            if (count > 100)
+            {
+                Debug.LogError("Key Fetching Ping Timed out!");
+                break;
+            }
+
+
+        };
+        string[] landmarks;
         Debug.Log("Got resource locations!");
+        string resp = api.responses[index];
+        landmarks = JsonUtility.FromJson<landmark_list>(resp).landmarks;
+        Debug.Log("Got entries:" + landmarks.ToString());
+        //showToast(("Got " + landmarks.Length + " Entries!"), 2);
+
+
 
 
         foreach (var landmark in landmarks)
         {
-            if (!nearLandmarks.ContainsKey(landmark.ToString()))
-                nearLandmarks[landmark.ToString()] = false;
-            if (!landmarkLocations.ContainsKey(landmark.ToString()))
-                landmarkLocations[landmark.ToString()] = new Vector2(0, 0);
+
             Debug.Log("Pinging for: " + landmark.ToString());
 
 
             Dictionary<string, string> args = new Dictionary<string, string>();
             args.Add("loc", landmark.ToString());
             args.Add("uid", SystemInfo.deviceUniqueIdentifier);
-            int index = api.counter;
+            index = api.counter;
             api.pingAPI("isNear", args);
 
 
-            int count = 0;
+            count = 0;
             while (api.responses.Count <= index)
             {
                 await Task.Delay(10);
@@ -217,15 +255,25 @@ public class GPS : MonoBehaviour
 
             };
 
-            string resp = api.responses[index];
+            resp = api.responses[index];
             Debug.Log("Got resp:'" + resp + "'");
             landmark_info nresp = new landmark_info();
             nresp = JsonUtility.FromJson<landmark_info>(resp);
             Debug.Log("Parsed; isNear:" + nresp.near + " landmark loc: (" + nresp.locX + "," + nresp.locY + ") distance: " + nresp.distance);
+            landmarks_data[landmark.ToString()] = nresp;
 
+            foreach(var lm_data in landmarks_data)
+            {
+                if (!landmarks.Contains<string>(lm_data.Key))
+                {
+                    landmarks_data.Remove(lm_data.Key);
+                }
+            }
 
-            landmarkLocations[landmark.ToString()] = new Vector2(nresp.locX, nresp.locY);
-            nearLandmarks[landmark.ToString()] = nresp.near;
+            //if (!landmarkLocations.ContainsKey(landmark.ToString()))
+            //    landmarkLocations[landmark.ToString()] = new Vector2(0, 0);
+            //landmarkLocations[landmark.ToString()] = new Vector2(nresp.locX, nresp.locY);
+            //nearLandmarks[landmark.ToString()] = nresp.near;
 
         }
     }

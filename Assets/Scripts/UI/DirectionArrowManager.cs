@@ -14,7 +14,7 @@ public class DirectionArrowManager : MonoBehaviour
 
     public Vector2 landmarkLocation;
     public Vector2 currentLocation;
-    private double distance;
+    public double distance;
 
     public float offset = -90;
     // Start is called before the first frame update

@@ -28,7 +28,7 @@ public class Web_Pinger : MonoBehaviour
     public void pingAPI(string page = "", Dictionary<string, string> args = null)
     {
 
-        
+        counter += 1;
         string urlToPing = host + ':' + port + '/' + page;
         Debug.Log("Recieved Ping Request: " + urlToPing);
         if (args != null)
@@ -53,7 +53,7 @@ public class Web_Pinger : MonoBehaviour
 
             }
         }
-        counter += 1;
+       
         Debug.Log("Pinging: " + urlToPing);
         StartCoroutine(GetRequest(urlToPing));
     }

@@ -8,34 +8,57 @@ using UnityEngine.UI;
 
 public class LandmarkEntry : MonoBehaviour
 {
-    public string Name;
+    public string id;
+    public string title;
+    public string description;
+    public string image_url;
+
+    public double distance;
+
+
+
     public DirectionArrowManager dirArrow;
-    public TextMeshProUGUI landmarkNameUI;
-    
+
+    public TextMeshProUGUI title_text_UI;
+    public TextMeshProUGUI desc_text_UI;
+
 
     public bool activated = false;
     // Start is called before the first frame update
     void Start()
     {
         GetComponent<Button>().interactable = false;
-        Debug.Log("New Entry Instantiated, name is: " + Name);
+        Debug.Log("New Entry Instantiated, title is: " + title);
+        Debug.Log("New Entry Instantiated, title is: " + title);
         dirArrow = GetComponentInChildren<DirectionArrowManager>();
-        landmarkNameUI =  GetComponentInChildren<TextMeshProUGUI>();
+
+        foreach(TextMeshProUGUI c in GetComponentsInChildren<TextMeshProUGUI>())
+        {
+            if (c.name == "Title")
+                title_text_UI = c;
+            else if(c.name == "Description")
+                desc_text_UI = c;
+        }
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!GPS.Instance.nearLandmarks.ContainsKey(Name) || !GPS.Instance.landmarkLocations.ContainsKey(Name))
+        if (!GPS.Instance.landmarks_data.ContainsKey(id))
         {
             Debug.LogError("Could not find landmark in GPS!");
             return;
         }
-        activated = GPS.Instance.nearLandmarks[Name];
-        dirArrow.landmarkLocation = GPS.Instance.landmarkLocations[Name];
+        activated = GPS.Instance.landmarks_data[id].near;
+        dirArrow.landmarkLocation = new Vector2(GPS.Instance.landmarks_data[id].locX, GPS.Instance.landmarks_data[id].locY);
         dirArrow.currentLocation = new Vector2(GPS.Instance.lat, GPS.Instance.lon);
 
-        landmarkNameUI.text = Name.Split('/').Last().Split('.').First();
+        //landmarkNameUI.title = title;
+        //landmarkNameUI.description = description;
+        title_text_UI.text = title;
+        desc_text_UI.text = description;
+
         if (activated)
         {
             dirArrow.activate();
@@ -46,6 +69,7 @@ public class LandmarkEntry : MonoBehaviour
             dirArrow.deactivate();
             GetComponent<Button>().interactable = false;
         }
+        distance = dirArrow.distance;
     }
 
     public void ArMode()
