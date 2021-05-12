@@ -21,8 +21,9 @@ public class GPS : MonoBehaviour
 
     public float closest;
 
-    public Dictionary<string, bool> nearLandmarks = new Dictionary<string, bool>();
-    public Dictionary<string, Vector2> landmarkLocations = new Dictionary<string, Vector2>();
+    //public Dictionary<string, bool> nearLandmarks = new Dictionary<string, bool>();
+    //public Dictionary<string, Vector2> landmarkLocations = new Dictionary<string, Vector2>();
+    public Dictionary<string, landmark_info> landmarks_data = new Dictionary<string, landmark_info>();
 
     private Dictionary<string, GameObject> spawned = new Dictionary<string, GameObject>();
 
@@ -105,13 +106,16 @@ public class GPS : MonoBehaviour
 
     }
 
-    public class landmarkPingResponse
+    public class landmark_info
     {
         //Vector2 location = new Vector2();
         public bool near = false;
         public float locX;
         public float locY;
         public float distance;
+        public string title;
+        public string description;
+        public string image_url;
 
     }
 
@@ -215,8 +219,8 @@ public class GPS : MonoBehaviour
 
             string resp = api.responses[index];
             Debug.Log("Got resp:'" + resp + "'");
-            landmarkPingResponse nresp = new landmarkPingResponse();
-            nresp = JsonUtility.FromJson<landmarkPingResponse>(resp);
+            landmark_info nresp = new landmark_info();
+            nresp = JsonUtility.FromJson<landmark_info>(resp);
             Debug.Log("Parsed; isNear:" + nresp.near + " landmark loc: (" + nresp.locX + "," + nresp.locY + ") distance: " + nresp.distance);
 
 

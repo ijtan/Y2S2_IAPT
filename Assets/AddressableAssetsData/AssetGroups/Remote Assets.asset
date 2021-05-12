@@ -17,15 +17,15 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 1d13a4744898f2a4cb742eae59905595
   m_SerializeEntries:
-  - m_GUID: 5c974765462abb947bb8259605511b70
-    m_Address: Assets/Prefabs/Sphere Add.prefab
+  - m_GUID: e45a9c223188ab840bb014d2b3a9670e
+    m_Address: Assets/Prefabs/3D Objects/Starbucks.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - remote
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
-  - m_GUID: e45a9c223188ab840bb014d2b3a9670e
-    m_Address: Assets/Prefabs/3D Objects/starbucks_addr.prefab
+  - m_GUID: 5c974765462abb947bb8259605511b70
+    m_Address: Assets/Prefabs/3D Objects/Geographic Museum.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - remote

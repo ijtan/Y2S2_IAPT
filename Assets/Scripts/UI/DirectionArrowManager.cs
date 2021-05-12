@@ -16,7 +16,7 @@ public class DirectionArrowManager : MonoBehaviour
     public Vector2 currentLocation;
     private double distance;
 
-    public float offset = 0;
+    public float offset = -90;
     // Start is called before the first frame update
     void Start()
     {
@@ -53,7 +53,7 @@ public class DirectionArrowManager : MonoBehaviour
         {
             float bearing = angleFromCoordinate(currentLocation.x, currentLocation.y, landmarkLocation.x, landmarkLocation.y);
 
-            arrow.rotation = Quaternion.Slerp(arrow.rotation, Quaternion.Euler(0, 0, -(Input.compass.magneticHeading + bearing + offset)), 100f);
+            arrow.rotation = Quaternion.Slerp(arrow.rotation, Quaternion.Euler(0, 0, Input.compass.magneticHeading + bearing + offset), 100f);
         }
 
         else
