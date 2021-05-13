@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class InfoPanel : MonoBehaviour
 {
@@ -9,6 +11,9 @@ public class InfoPanel : MonoBehaviour
     public string description;
 
     public bool isReverse;
+
+
+
     //float x;
     //float y;
     //float z;
@@ -16,7 +21,7 @@ public class InfoPanel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        //StartCoroutine(DownloadImage(url));
     }
 
     // Update is called once per frame
@@ -35,6 +40,21 @@ public class InfoPanel : MonoBehaviour
             var cameraTransform = Camera.main.gameObject.transform;
             transform.LookAt(cameraTransform);
             if (isReverse) transform.forward *= -1;
+        }
+    }
+
+
+
+    IEnumerator DownloadImage(string MediaUrl)
+    {
+        UnityWebRequest request = UnityWebRequestTexture.GetTexture(MediaUrl);
+        yield return request.SendWebRequest();
+        //request.result == UnityWebRequest.Result.ConnectionError
+        if(request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            Debug.Log(request.error);
+        else
+        {
+            GetComponentInChildren<RawImage>().texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
         }
     }
 }

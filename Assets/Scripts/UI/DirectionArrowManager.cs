@@ -16,19 +16,14 @@ public class DirectionArrowManager : MonoBehaviour
     public Vector2 currentLocation;
     public double distance;
     public double real_distance;
-    public float degToRotateArrow = 0f;
 
 
     public Quaternion offset = Quaternion.Euler(0f, 0f, -90f);
-    public Quaternion correctionQuaternion = Quaternion.Euler(0f, 0f, 1f);
-    public Gyroscope phoneGyro;
-    public Quaternion phoneRotation;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        phoneGyro = Input.gyro;
-        phoneGyro.enabled = true;
         Input.compass.enabled = true;
         distanceTextObject = GetComponentInChildren<TextMeshProUGUI>();
 
@@ -53,9 +48,6 @@ public class DirectionArrowManager : MonoBehaviour
     void Update()
     {
 
-        phoneRotation = Input.gyro.attitude;
-
-
 
         string unit = "m";
         distance = CalculateDistance(currentLocation.x, landmarkLocation.x, currentLocation.y, landmarkLocation.y);
@@ -72,30 +64,6 @@ public class DirectionArrowManager : MonoBehaviour
         if (!activated)
         {
 
-            //Quaternion gyroQuaternion = GyroToUnity(Input.gyro.attitude);
-            //// rotate coordinate system 90 degrees. Correction Quaternion has to come first
-            //Quaternion calculatedRotation = correctionQuaternion * (Quaternion.Inverse(gyroQuaternion)) * offset;
-            ////Quaternion calculatedRotation = correctionQuaternion *gyroQuaternion * offset;
-            ////transform.rotation = calculatedRotation;
-            //float bearing = angleFromCoordinate(currentLocation.x, currentLocation.y, landmarkLocation.x, landmarkLocation.y);
-            ////bearing = reCalcAngle(bearing);
-
-
-            ////calculatedRotation.y = 0;
-            ////calculatedRotation.x = 0;
-            //calculatedRotation.z = 0;
-            //calculatedRotation.w = 0;
-            ////arrow.rotation = calculatedRotation * Quaternion.Euler(0, 0, bearing);
-            ////arrow.rotation = calculatedRotation * Quaternion.Euler(0, 0, bearing);
-
-            ////arrow.rotation = calculatedRotation*Quaternion.Euler(0, 0, Input.compass.magneticHeading + bearing);
-
-            ////arrow.rotation = new Quaternion(0,0,Input.compass.magneticHeading,0); 
-
-            //degToRotateArrow = (Input.gyro.attitude.z * 360) + bearing;
-            //arrow.rotation = new Quaternion(0, 0, bearing, 0)*Quaternion.Inverse(Input.gyro.attitude);
-
-
             float bearing = angleFromCoordinate(currentLocation.x, currentLocation.y, landmarkLocation.x, landmarkLocation.y);
             arrow.rotation = Quaternion.Slerp(arrow.rotation, Quaternion.Euler(0, 0, Input.compass.magneticHeading + bearing), 100f)*offset;
         }
@@ -103,30 +71,6 @@ public class DirectionArrowManager : MonoBehaviour
         else
         {
             arrow.rotation *= Quaternion.Euler(0, 0, rotateSpeedWhenActive);
-        }
-    }
-
-    public float reCalcAngle(float bearing) {
-        // get the angle around the z-axis rotated
-        //    float degree = Math.round(event.values [0]);
-        //degree += geoField.getDeclination();
-
-        //float bearing = location.bearingTo(target);
-        float degree = GyroToUnity(Input.gyro.attitude).z;
-        degree = (bearing - degree) * -1;
-        degree = normalizeDegree(degree);
-        return degree;
-    }
-
-    private float normalizeDegree(float value)
-    {
-        if (value >= 0.0f && value <= 180.0f)
-        {
-            return value;
-        }
-        else
-        {
-            return 180 + (180 + value);
         }
     }
 
