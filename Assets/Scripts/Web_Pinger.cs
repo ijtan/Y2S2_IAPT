@@ -58,10 +58,10 @@ public class Web_Pinger : MonoBehaviour
             port_input.onEndEdit.AddListener(portUpdated);
         }
 
-        
-        
+
+
         port_input.onEndEdit.AddListener(portUpdated);
-        //DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);
     }
 
     //// Update is called once per frame

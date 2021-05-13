@@ -45,7 +45,7 @@ public class GPS : MonoBehaviour
 
     private static GPS _instance;
     public Text txt;
-    
+
 
     public static GPS Instance { get { return _instance; } }
     // Start is called before the first frame update
@@ -60,6 +60,7 @@ public class GPS : MonoBehaviour
         {
             _instance = this;
         }
+        DontDestroyOnLoad(gameObject);
     }
     void Start()
     {
@@ -80,7 +81,7 @@ public class GPS : MonoBehaviour
 
     public void Update()
     {
-        
+
     }
 
     public IEnumerator StartLocServ()
@@ -102,7 +103,7 @@ public class GPS : MonoBehaviour
         {
             Debug.Log("Waiting: " + Input.location.status.ToString());
             //showToast(("Waiting... " + maxWait.ToString() + " st:" + Input.location.status.ToString()), 1);
-            showToast(("Waiting for GPS... "),1);
+            showToast(("Waiting for GPS... "), 1);
             maxWait--;
             yield return new WaitForSeconds(1f);
         }
@@ -152,7 +153,7 @@ public class GPS : MonoBehaviour
         while (true)
         {
             updateCount++;
-            if (updateCount > 10/UPDATE_TIME)
+            if (updateCount > 10 / UPDATE_TIME)
             {
                 updateCount = 0;
                 updateLandmarksFromApi();
@@ -184,7 +185,7 @@ public class GPS : MonoBehaviour
         showToast("Updating Landmarks from API!", 2);
         Debug.Log("Updating Landmarks From Api Start!");
         //var landmarks = await Addressables.LoadResourceLocationsAsync(_label).Task;
-  
+
 
 
         int index = Web_Pinger.Instance.counter;
@@ -197,7 +198,7 @@ public class GPS : MonoBehaviour
         int count = 0;
         while (Web_Pinger.Instance.responses.Count <= index)
         {
-            
+
 
             count++;
             if (count > 100)
@@ -214,7 +215,7 @@ public class GPS : MonoBehaviour
         string resp = Web_Pinger.Instance.responses[index];
         landmarks = JsonUtility.FromJson<landmark_list>(resp).landmarks;
         Debug.Log("Got entries:" + landmarks.ToString());
-        
+
         //showToast(("Got " + landmarks.Length + " Entries!"), 2);
 
 
@@ -255,7 +256,7 @@ public class GPS : MonoBehaviour
             Debug.Log("Parsed; isNear:" + nresp.near + " landmark loc: (" + nresp.locX + "," + nresp.locY + ") distance: " + nresp.distance);
             landmarks_data[landmark.ToString()] = nresp;
 
-            foreach(var lm_data in new Dictionary<string,landmark_info>(landmarks_data))
+            foreach (var lm_data in new Dictionary<string, landmark_info>(landmarks_data))
             {
                 if (!landmarks.Contains<string>(lm_data.Key))
                 {

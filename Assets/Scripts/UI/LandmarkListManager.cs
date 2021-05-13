@@ -46,8 +46,8 @@ public class LandmarkListManager : MonoBehaviour
     void Update()
     {
         //GPS.Instance.landmark_
- 
-         //ADD NEW BUTTONS
+
+        //ADD NEW BUTTONS
         foreach (KeyValuePair<string, landmark_info> landmark in GPS.Instance.landmarks_data)
         {
             if (!buttons.ContainsKey(landmark.Key))
@@ -67,9 +67,9 @@ public class LandmarkListManager : MonoBehaviour
         //ORDER LIST BY DISTANCE
 
         sorted_button_list.Clear();
-        foreach (KeyValuePair<string, GameObject> butt in new Dictionary<string,GameObject>(buttons))
+        foreach (KeyValuePair<string, GameObject> butt in new Dictionary<string, GameObject>(buttons))
         {
-            if(!GPS.Instance.landmarks_data.ContainsKey(butt.Key))
+            if (!GPS.Instance.landmarks_data.ContainsKey(butt.Key))
             {
                 Destroy(butt.Value);
                 buttons.Remove(butt.Key);
@@ -79,7 +79,7 @@ public class LandmarkListManager : MonoBehaviour
                 LandmarkEntry blm = butt.Value.GetComponent<LandmarkEntry>();
                 sorted_button_list.Add(blm);
             }
-            
+
         }
 
         sorted_button_list.Sort((x, y) => x.real_distance.CompareTo(y.real_distance));
@@ -90,5 +90,5 @@ public class LandmarkListManager : MonoBehaviour
         }
     }
 
-    
+
 }

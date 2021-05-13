@@ -35,11 +35,11 @@ public class LandmarkEntry : MonoBehaviour
         Debug.Log("New Entry Instantiated, title is: " + title);
         dirArrow = GetComponentInChildren<DirectionArrowManager>();
 
-        foreach(TextMeshProUGUI c in GetComponentsInChildren<TextMeshProUGUI>())
+        foreach (TextMeshProUGUI c in GetComponentsInChildren<TextMeshProUGUI>())
         {
             if (c.name == "Title")
                 title_text_UI = c;
-            else if(c.name == "Description")
+            else if (c.name == "Description")
                 desc_text_UI = c;
         }
 
@@ -78,6 +78,9 @@ public class LandmarkEntry : MonoBehaviour
 
     public void ArMode()
     {
+        var ir = FindObjectOfType<InformationRetainer>();
+        ir.landmarkObject = GPS.Instance.landmarks_data[id];
+        ir.id = id;
         SceneManager.LoadScene("ArMode");
     }
 }
