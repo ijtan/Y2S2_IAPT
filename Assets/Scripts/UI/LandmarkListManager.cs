@@ -56,7 +56,8 @@ public class LandmarkListManager : MonoBehaviour
                 //newLM.transform.parent = this.transform;
                 newLM.GetComponent<LandmarkEntry>().id = landmark.Key;
                 newLM.GetComponent<LandmarkEntry>().title = landmark.Value.title;
-                newLM.GetComponent<LandmarkEntry>().description = landmark.Value.description;
+                newLM.GetComponent<LandmarkEntry>().short_desc = landmark.Value.short_description;
+                newLM.GetComponent<LandmarkEntry>().long_desc = landmark.Value.long_description;
                 newLM.GetComponent<LandmarkEntry>().image_url = landmark.Value.image_url;
                 buttons.Add(landmark.Key, newLM);
             }
@@ -76,7 +77,7 @@ public class LandmarkListManager : MonoBehaviour
             sorted_button_list.Add(blm);
         }
 
-        sorted_button_list.Sort((x, y) => x.distance.CompareTo(y.distance));
+        sorted_button_list.Sort((x, y) => x.real_distance.CompareTo(y.real_distance));
 
         for (int i = 0; i < sorted_button_list.Count; i++)
         {

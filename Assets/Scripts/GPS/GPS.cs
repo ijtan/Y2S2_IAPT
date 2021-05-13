@@ -18,7 +18,8 @@ public class landmark_info
     public float locY = 0;
     public float distance = 0;
     public string title = "";
-    public string description = "";
+    public string short_description = "";
+    public string long_description = "";
     public string image_url = "";
 }
 
@@ -203,7 +204,7 @@ public class GPS : MonoBehaviour
         }
     }
 
-    private async Task updateLandmarksFromApi()
+    public async Task updateLandmarksFromApi()
     {
         showToast("Updating Landmarks from API!", 2);
         Debug.Log("Updating Landmarks From Api Start!");
@@ -212,7 +213,10 @@ public class GPS : MonoBehaviour
 
 
         int index = Web_Pinger.Instance.counter;
-        Web_Pinger.Instance.pingAPI("getKeys", new Dictionary<string, string>());
+
+        Dictionary<string, string> Key_args = new Dictionary<string, string>();
+        Key_args.Add("uid", SystemInfo.deviceUniqueIdentifier);
+        Web_Pinger.Instance.pingAPI("getKeys", Key_args);
 
 
         int count = 0;

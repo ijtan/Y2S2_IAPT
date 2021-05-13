@@ -10,10 +10,13 @@ public class LandmarkEntry : MonoBehaviour
 {
     public string id;
     public string title;
-    public string description;
+    public string short_desc;
+    public string long_desc;
     public string image_url;
 
     public double distance;
+    public double real_distance;
+
 
 
 
@@ -57,7 +60,7 @@ public class LandmarkEntry : MonoBehaviour
         //landmarkNameUI.title = title;
         //landmarkNameUI.description = description;
         title_text_UI.text = title;
-        desc_text_UI.text = description;
+        desc_text_UI.text = short_desc;
 
         if (activated)
         {
@@ -70,6 +73,7 @@ public class LandmarkEntry : MonoBehaviour
             GetComponent<Button>().interactable = false;
         }
         distance = dirArrow.distance;
+        real_distance = dirArrow.real_distance;
     }
 
     public void ArMode()

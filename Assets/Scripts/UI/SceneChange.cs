@@ -49,4 +49,9 @@ public class SceneChange : MonoBehaviour
     {
         SceneManager.LoadScene("ArMode");
     }
+
+    public void changeSceneTo(string newSchene)
+    {
+        SceneManager.LoadScene(newSchene);
+    }
 }
