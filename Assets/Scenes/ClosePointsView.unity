@@ -1477,7 +1477,15 @@ PrefabInstance:
     - target: {fileID: 2824303819060283860, guid: 5baf03767dd09e14ab59a34f41da04fc, type: 3}
       propertyPath: txt
       value: 
-      objectReference: {fileID: 1749793689}
+      objectReference: {fileID: 0}
+    - target: {fileID: 2824303819060283860, guid: 5baf03767dd09e14ab59a34f41da04fc, type: 3}
+      propertyPath: UPDATE_TIME
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2824303819060283860, guid: 5baf03767dd09e14ab59a34f41da04fc, type: 3}
+      propertyPath: gpsAccuracy
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 2824303819060283861, guid: 5baf03767dd09e14ab59a34f41da04fc, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -1578,6 +1586,10 @@ PrefabInstance:
     - target: {fileID: 5358254327339902136, guid: c56e0ef3fc1493e4da7903c6b71f5eea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5358254327339902137, guid: c56e0ef3fc1493e4da7903c6b71f5eea, type: 3}
+      propertyPath: host
+      value: http://92.251.86.79
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c56e0ef3fc1493e4da7903c6b71f5eea, type: 3}

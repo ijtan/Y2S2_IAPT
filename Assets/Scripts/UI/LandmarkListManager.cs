@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -66,15 +67,19 @@ public class LandmarkListManager : MonoBehaviour
         //ORDER LIST BY DISTANCE
 
         sorted_button_list.Clear();
-        foreach (KeyValuePair<string, GameObject> butt in buttons)
+        foreach (KeyValuePair<string, GameObject> butt in new Dictionary<string,GameObject>(buttons))
         {
             if(!GPS.Instance.landmarks_data.ContainsKey(butt.Key))
             {
                 Destroy(butt.Value);
                 buttons.Remove(butt.Key);
             }
-            LandmarkEntry blm = butt.Value.GetComponent<LandmarkEntry>();
-            sorted_button_list.Add(blm);
+            else
+            {
+                LandmarkEntry blm = butt.Value.GetComponent<LandmarkEntry>();
+                sorted_button_list.Add(blm);
+            }
+            
         }
 
         sorted_button_list.Sort((x, y) => x.real_distance.CompareTo(y.real_distance));

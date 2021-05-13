@@ -1128,6 +1128,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: GPS_System
       objectReference: {fileID: 0}
+    - target: {fileID: 2824303819060283860, guid: 5baf03767dd09e14ab59a34f41da04fc, type: 3}
+      propertyPath: UPDATE_TIME
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2824303819060283860, guid: 5baf03767dd09e14ab59a34f41da04fc, type: 3}
+      propertyPath: gpsAccuracy
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 2824303819060283861, guid: 5baf03767dd09e14ab59a34f41da04fc, type: 3}
       propertyPath: m_RootOrder
       value: 6
