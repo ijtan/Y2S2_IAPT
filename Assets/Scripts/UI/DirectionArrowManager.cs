@@ -16,10 +16,16 @@ public class DirectionArrowManager : MonoBehaviour
     public Vector2 currentLocation;
     public double distance;
 
-    public float offset = -90;
+
+    public Quaternion offset = Quaternion.Euler(0f, 0f, 90f);
+    public Quaternion correctionQuaternion = Quaternion.Euler(0f, 0f, 1f);
+    public Gyroscope phoneGyro;
+
     // Start is called before the first frame update
     void Start()
     {
+        phoneGyro = Input.gyro;
+        phoneGyro.enabled = true;
         distanceTextObject = GetComponentInChildren<TextMeshProUGUI>();
 
 
@@ -34,10 +40,17 @@ public class DirectionArrowManager : MonoBehaviour
         }
     }
 
+    private static Quaternion GyroToUnity(Quaternion q)
+    {
+        return new Quaternion(q.x, q.y, -q.z, -q.w);
+    }
+
     // Update is called once per frame
     void Update()
     {
+
         
+
         string unit = "m";
         distance = CalculateDistance(currentLocation.x, landmarkLocation.x, currentLocation.y, landmarkLocation.y);
         if (distance > 1000)
@@ -51,9 +64,22 @@ public class DirectionArrowManager : MonoBehaviour
 
         if (!activated)
         {
+
+            Quaternion gyroQuaternion = GyroToUnity(Input.gyro.attitude);
+            // rotate coordinate system 90 degrees. Correction Quaternion has to come first
+            Quaternion calculatedRotation = correctionQuaternion * gyroQuaternion*offset;
+            //transform.rotation = calculatedRotation;
             float bearing = angleFromCoordinate(currentLocation.x, currentLocation.y, landmarkLocation.x, landmarkLocation.y);
 
-            arrow.rotation = Quaternion.Slerp(arrow.rotation, Quaternion.Euler(0, 0, Input.compass.magneticHeading + bearing + offset), 100f);
+            
+
+
+            calculatedRotation.z = 0;
+            calculatedRotation.w = 0;
+            //arrow.rotation = calculatedRotation*Quaternion.Euler(0, 0, Input.compass.magneticHeading + bearing);
+            arrow.rotation = calculatedRotation * Quaternion.Euler(0, 0, 
+                bearing);
+            //arrow.rotation = Quaternion.Slerp(arrow.rotation, Quaternion.Euler(0, 0, Input.compass.magneticHeading + bearing), 100f)* calculatedRotation;
         }
 
         else

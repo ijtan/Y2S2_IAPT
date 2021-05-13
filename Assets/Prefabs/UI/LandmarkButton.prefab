@@ -74,8 +74,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4289111718
+  m_fontColor: {r: 0.6509804, g: 0.6509804, b: 0.6509804, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -417,8 +417,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4289111718
+  m_fontColor: {r: 0.6509804, g: 0.6509804, b: 0.6509804, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -969,11 +969,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distanceText: 
   activated: 0
-  rotateSpeedWhenActive: 20
+  rotateSpeedWhenActive: 30
   landmarkLocation: {x: 0, y: 0}
   currentLocation: {x: 0, y: 0}
   distance: 0
-  offset: 0
+  offset: {x: 0, y: 0, z: 0.70710677, w: 0.70710677}
+  correctionQuaternion: {x: 0, y: 0, z: 0.008726535, w: 0.9999619}
 --- !u!1 &8981374451379023280
 GameObject:
   m_ObjectHideFlags: 0
@@ -1048,8 +1049,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4280327613
-  m_fontColor: {r: 0.7411765, g: 0.6156863, b: 0.1254902, a: 1}
+    rgba: 4285169692
+  m_fontColor: {r: 0.10980393, g: 0.5019608, b: 0.4156863, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
