@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -7,7 +9,7 @@ public class Web_Pinger : MonoBehaviour
 
 
 {
-    
+
     public string host = "http://192.168.0.7";
     public string port = "5000";
     public List<string> responses;
@@ -16,6 +18,18 @@ public class Web_Pinger : MonoBehaviour
     private static Web_Pinger _instance;
     public static Web_Pinger Instance { get { return _instance; } }
     // Start is called before the first frame update
+    public TMP_InputField hostname_input;
+    public TMP_InputField port_input;
+
+    public void hostUpdated(string text)
+    {
+        host = text;
+    }
+
+    public void portUpdated(string text)
+    {
+        port = text;
+    }
 
     private void Awake()
     {
@@ -33,6 +47,20 @@ public class Web_Pinger : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (hostname_input != null)
+        {
+            hostname_input.text = host;
+            hostname_input.onEndEdit.AddListener(hostUpdated);
+        }
+        if (port_input != null)
+        {
+            port_input.text = port;
+            port_input.onEndEdit.AddListener(portUpdated);
+        }
+
+        
+        
+        port_input.onEndEdit.AddListener(portUpdated);
         //DontDestroyOnLoad(gameObject);
     }
 
@@ -71,14 +99,24 @@ public class Web_Pinger : MonoBehaviour
 
             }
         }
-       
+
         Debug.Log("Pinging: " + urlToPing);
         StartCoroutine(GetRequest(urlToPing));
     }
 
+    //public void updateHost(string newHost)
+    //{
+    //    host = newHost;
+    //}
+
+    //public void updatePort(string newPort)
+    //{
+    //    port = newPort;
+    //}
+
     IEnumerator GetRequest(string uri)
     {
-        
+
         string response = "";
         using (UnityEngine.Networking.UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
