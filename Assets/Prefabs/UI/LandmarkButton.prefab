@@ -971,13 +971,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distanceText: 
   activated: 0
-  rotateSpeedWhenActive: 30
+  rotateSpeedWhenActive: -25
   landmarkLocation: {x: 0, y: 0}
   currentLocation: {x: 0, y: 0}
   distance: 0
   real_distance: 0
   offset: {x: 0, y: 0, z: 0.70710677, w: 0.70710677}
-  correctionQuaternion: {x: 0, y: 0, z: 0.008726535, w: 0.9999619}
 --- !u!1 &8981374451379023280
 GameObject:
   m_ObjectHideFlags: 0

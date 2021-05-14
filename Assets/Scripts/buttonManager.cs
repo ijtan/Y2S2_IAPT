@@ -30,6 +30,7 @@ public class buttonManager : MonoBehaviour
 
     public void refreshLandmarksFromApi()
     {
+        GPS.Instance.forceOnceUpdateGPS();
         GPS.Instance.updateLandmarksFromApi();
     }
 

@@ -10,9 +10,11 @@ using UnityEngine.Android;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
+[Serializable]
 public class landmark_info
 {
     //Vector2 location = new Vector2();
+    public string id = "";
     public bool near = false;
     public float locX = 0;
     public float locY = 0;
@@ -23,10 +25,11 @@ public class landmark_info
     public string image_url = "";
 }
 
-
+[Serializable]
 public class landmark_info_list
 {
-    public Dictionary<string,landmark_info> landmarks = new Dictionary<string, landmark_info>();
+    //public Dictionary<string,landmark_info> landmarks = new Dictionary<string, landmark_info>();
+    public landmark_info[] landmarks;
 }
 
 //public class landmark_list
@@ -142,6 +145,14 @@ public class GPS : MonoBehaviour
 
     }
 
+    public void forceOnceUpdateGPS()
+    {
+        Dictionary<string, string> args = new Dictionary<string, string>();
+        args.Add("lat", lat.ToString());
+        args.Add("lon", lon.ToString());
+        args.Add("uid", SystemInfo.deviceUniqueIdentifier);
+        Web_Pinger.Instance.pingAPI("getNear", args);
+    }
 
     public IEnumerator updateGPS()
     {
@@ -198,7 +209,7 @@ public class GPS : MonoBehaviour
 
         Dictionary<string, string> Key_args = new Dictionary<string, string>();
         Key_args.Add("uid", SystemInfo.deviceUniqueIdentifier);
-        Web_Pinger.Instance.pingAPI("getKeys", Key_args);
+        Web_Pinger.Instance.pingAPI("getFullNear", Key_args);
 
 
         int count = 0;
@@ -222,11 +233,17 @@ public class GPS : MonoBehaviour
 
         var landmarks = JsonUtility.FromJson<landmark_info_list>(resp).landmarks;
 
-        Debug.Log("Got entries:" + landmarks.ToString());
+        Debug.Log("Got entries:" + landmarks.Length.ToString());
 
         //showToast(("Got " + landmarks.Length + " Entries!"), 2);
 
-        landmarks_data = landmarks;
+        var newLandMarkData = new Dictionary<string, landmark_info>();
+        foreach(var lm in landmarks)
+        {
+            newLandMarkData[lm.id] = lm;
+        }
+
+        landmarks_data = newLandMarkData;
 
         //foreach (var landmark in landmarks)
         //{

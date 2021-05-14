@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -11,7 +12,8 @@ public class InfoPanel : MonoBehaviour
     public string description;
 
     public bool isReverse;
-
+    public TextMeshProUGUI Title;
+    public TextMeshProUGUI Desc;
 
 
     //float x;
@@ -27,6 +29,8 @@ public class InfoPanel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Desc.text = description;
+        Title.text = title;
         // Rotate towards target    
         var targetPoint = Camera.main.transform.position;
         targetPoint.y = transform.position.y;

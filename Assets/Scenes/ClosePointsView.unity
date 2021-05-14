@@ -3171,7 +3171,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5358254327339902137, guid: c56e0ef3fc1493e4da7903c6b71f5eea, type: 3}
       propertyPath: host
-      value: http://iapt.freemyip.com
+      value: http://192.168.0.2
       objectReference: {fileID: 0}
     - target: {fileID: 5358254327339902137, guid: c56e0ef3fc1493e4da7903c6b71f5eea, type: 3}
       propertyPath: port_input

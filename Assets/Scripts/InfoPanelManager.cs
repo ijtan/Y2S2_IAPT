@@ -15,7 +15,7 @@ public class information_panel_details
 }
 public class InfoPanelManager : MonoBehaviour
 {
-    GameObject InfoPanelToSpawn;
+    public GameObject InfoPanelPrefab;
     public string id;
     public Dictionary<string, GameObject> spawned = new Dictionary<string, GameObject>();
     // Start is called before the first frame update
@@ -32,15 +32,16 @@ public class InfoPanelManager : MonoBehaviour
         if (ir == null)
         {
             Debug.LogError("Could not find Info retainer!!");
-            landmark = ir.landmarkObject;
-            id = ir.id;
-            Destroy(ir.gameObject);
+            return;
         }
+        landmark = ir.landmarkObject;
+        id = ir.id;
+        Destroy(ir.gameObject);
     }
 
     public void spawnFromRetainer()
     {
-        GameObject newPanel = Instantiate(InfoPanelToSpawn);
+        GameObject newPanel = Instantiate(InfoPanelPrefab);
         InfoPanel newPanelInfo = newPanel.GetComponent<InfoPanel>();
 
         newPanelInfo.title = landmark.title;
@@ -87,7 +88,7 @@ public class InfoPanelManager : MonoBehaviour
 
         string resp = Web_Pinger.Instance.responses[index];
         information_panel_details ipd = JsonUtility.FromJson<information_panel_details>(resp);
-        GameObject newPanel = Instantiate(InfoPanelToSpawn);
+        GameObject newPanel = Instantiate(InfoPanelPrefab);
         InfoPanel newPanelInfo = newPanel.GetComponent<InfoPanel>();
 
         newPanelInfo.title = ipd.title;
