@@ -88,6 +88,8 @@ public class LandmarkListManager : MonoBehaviour
         {
             buttons[sorted_button_list[i].id].transform.SetSiblingIndex(i);
         }
+
+        
     }
 
 

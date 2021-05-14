@@ -23,10 +23,16 @@ public class landmark_info
     public string image_url = "";
 }
 
-public class landmark_list
+
+public class landmark_info_list
 {
-    public string[] landmarks;
+    public Dictionary<string,landmark_info> landmarks = new Dictionary<string, landmark_info>();
 }
+
+//public class landmark_list
+//{
+//    public string[] landmarks;
+//}
 
 public class GPS : MonoBehaviour
 {
@@ -210,61 +216,62 @@ public class GPS : MonoBehaviour
 
 
         };
-        string[] landmarks;
+
         Debug.Log("Got resource locations!");
         string resp = Web_Pinger.Instance.responses[index];
-        landmarks = JsonUtility.FromJson<landmark_list>(resp).landmarks;
+
+        var landmarks = JsonUtility.FromJson<landmark_info_list>(resp).landmarks;
+
         Debug.Log("Got entries:" + landmarks.ToString());
 
         //showToast(("Got " + landmarks.Length + " Entries!"), 2);
 
+        landmarks_data = landmarks;
+
+        //foreach (var landmark in landmarks)
+        //{
+
+            //    Debug.Log("Pinging for: " + landmark.ToString());
 
 
-
-        foreach (var landmark in landmarks)
-        {
-
-            Debug.Log("Pinging for: " + landmark.ToString());
-
-
-            Dictionary<string, string> args = new Dictionary<string, string>();
-            args.Add("loc", landmark.ToString());
-            args.Add("uid", SystemInfo.deviceUniqueIdentifier);
-            index = Web_Pinger.Instance.counter;
-            Web_Pinger.Instance.pingAPI("isNear", args);
+            //    Dictionary<string, string> args = new Dictionary<string, string>();
+            //    args.Add("loc", landmark.ToString());
+            //    args.Add("uid", SystemInfo.deviceUniqueIdentifier);
+            //    index = Web_Pinger.Instance.counter;
+            //    Web_Pinger.Instance.pingAPI("isNear", args);
 
 
-            count = 0;
-            while (Web_Pinger.Instance.responses.Count <= index)
-            {
-                await Task.Delay(10);
+            //    count = 0;
+            //    while (Web_Pinger.Instance.responses.Count <= index)
+            //    {
+            //        await Task.Delay(10);
 
-                count++;
-                if (count > 100)
-                {
-                    Debug.LogError("GPS Nearity Ping Timed out!");
-                    break;
-                }
+            //        count++;
+            //        if (count > 100)
+            //        {
+            //            Debug.LogError("GPS Nearity Ping Timed out!");
+            //            break;
+            //        }
 
 
-            };
+            //    };
 
-            resp = Web_Pinger.Instance.responses[index];
-            Debug.Log("Got resp:'" + resp + "'");
-            landmark_info nresp = new landmark_info();
-            nresp = JsonUtility.FromJson<landmark_info>(resp);
-            Debug.Log("Parsed; isNear:" + nresp.near + " landmark loc: (" + nresp.locX + "," + nresp.locY + ") distance: " + nresp.distance);
-            landmarks_data[landmark.ToString()] = nresp;
+            //    resp = Web_Pinger.Instance.responses[index];
+            //    Debug.Log("Got resp:'" + resp + "'");
+            //    landmark_info nresp = new landmark_info();
+            //    nresp = JsonUtility.FromJson<landmark_info>(resp);
+            //    Debug.Log("Parsed; isNear:" + nresp.near + " landmark loc: (" + nresp.locX + "," + nresp.locY + ") distance: " + nresp.distance);
+            //    landmarks_data[landmark.ToString()] = nresp;
 
-            foreach (var lm_data in new Dictionary<string, landmark_info>(landmarks_data))
-            {
-                if (!landmarks.Contains<string>(lm_data.Key))
-                {
-                    landmarks_data.Remove(lm_data.Key);
-                }
-            }
+            //    foreach (var lm_data in new Dictionary<string, landmark_info>(landmarks_data))
+            //    {
+            //        if (!landmarks.Contains<string>(lm_data.Key))
+            //        {
+            //            landmarks_data.Remove(lm_data.Key);
+            //        }
+            //    }
 
-        }
+            //}
     }
 
 
