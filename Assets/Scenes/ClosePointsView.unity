@@ -2002,6 +2002,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8724eb5f453a7384188f7d134b6f1aab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  landmarkObject:
+    id: 
+    near: 0
+    locX: 0
+    locY: 0
+    distance: 0
+    title: 
+    short_description: 
+    long_description: 
+    image_urls: []
   id: 
 --- !u!4 &1554500092
 Transform:
@@ -3171,7 +3181,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5358254327339902137, guid: c56e0ef3fc1493e4da7903c6b71f5eea, type: 3}
       propertyPath: host
-      value: http://192.168.0.2
+      value: http://iapt.freemyip.com
       objectReference: {fileID: 0}
     - target: {fileID: 5358254327339902137, guid: c56e0ef3fc1493e4da7903c6b71f5eea, type: 3}
       propertyPath: port_input

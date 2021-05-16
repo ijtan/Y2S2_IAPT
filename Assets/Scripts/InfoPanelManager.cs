@@ -46,12 +46,12 @@ public class InfoPanelManager : MonoBehaviour
 
         newPanelInfo.title = landmark.title;
         newPanelInfo.description = landmark.long_description;
-        newPanelInfo.image_urls = new string[1];
-        newPanelInfo.image_urls[0] = landmark.image_url;
+        //newPanelInfo.image_urls = new string[1];
+        newPanelInfo.image_urls = landmark.image_urls;
 
         Vector3 camPos = Camera.main.transform.position;
         
-        newPanel.transform.SetParent(this.transform, false);
+        newPanel.transform.SetParent(this.transform, true);
         newPanel.transform.position = new Vector3(camPos.x + 2, camPos.y, camPos.z);
         //newPanel.transform.position = new Vector3(landmark.x, landmark.y, landmark.z);
 

@@ -22,7 +22,7 @@ public class landmark_info
     public string title = "";
     public string short_description = "";
     public string long_description = "";
-    public string image_url = "";
+    public string[] image_urls;
 }
 
 [Serializable]

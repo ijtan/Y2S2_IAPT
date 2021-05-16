@@ -12,7 +12,7 @@ public class LandmarkEntry : MonoBehaviour
     public string title;
     public string short_desc;
     public string long_desc;
-    public string image_url;
+    public string[] image_urls;
 
     public double distance;
     public double real_distance;

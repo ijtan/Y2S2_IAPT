@@ -59,7 +59,7 @@ public class LandmarkListManager : MonoBehaviour
                 newLM.GetComponent<LandmarkEntry>().title = landmark.Value.title;
                 newLM.GetComponent<LandmarkEntry>().short_desc = landmark.Value.short_description;
                 newLM.GetComponent<LandmarkEntry>().long_desc = landmark.Value.long_description;
-                newLM.GetComponent<LandmarkEntry>().image_url = landmark.Value.image_url;
+                newLM.GetComponent<LandmarkEntry>().image_urls = landmark.Value.image_urls;
                 buttons.Add(landmark.Key, newLM);
             }
         }
