@@ -44,12 +44,11 @@ public class InfoPanel : MonoBehaviour
         if (!updated && (Vector3.Distance(posd.transform.position, new Vector3(0, 0, 0)) > 0.1))
         {
             updated = true;
-            //transform.position = new Vector3(transform.position.x - posd.transform.position.x, transform.position.y - posd.transform.position.y, transform.position.z - posd.transform.position.z);
             FindObjectOfType<InfoPanelManager>().resetPositions();
         }
         Desc.text = description;
-        string posits = transform.position.ToString() + '\n' + transform.parent.position.ToString() + '\n' + FindObjectOfType<ARPoseDriver>().transform.position.ToString() + '\n' + FindObjectOfType<ARPoseDriver>().transform.parent.position.ToString() + '\n' + Camera.main.transform.position.ToString() + '\n' + Camera.main.transform.parent.position.ToString();
-        Desc.text = posits;
+        //string posits = transform.position.ToString() + '\n' + transform.parent.position.ToString() + '\n' + FindObjectOfType<ARPoseDriver>().transform.position.ToString() + '\n' + FindObjectOfType<ARPoseDriver>().transform.parent.position.ToString() + '\n' + Camera.main.transform.position.ToString() + '\n' + Camera.main.transform.parent.position.ToString();
+        //Desc.text = posits;
 
 
         Title.text = title;

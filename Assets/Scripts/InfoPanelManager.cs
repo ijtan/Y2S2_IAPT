@@ -94,18 +94,6 @@ public class InfoPanelManager : MonoBehaviour
         newPanelInfo.description = ipd.title;
         newPanelInfo.image_urls = ipd.image_urls;
         newPanel.transform.SetParent(this.transform, false);
-
-        //var orig = FindObjectOfType<ARPoseDriver>();
-
-        //orig.transform.position = new Vector3(0, 0, 0);
-        //orig.transform.localPosition = new Vector3(0, 0, 0);
-        
-        //orig
-        //transform.parent.transform.position = new Vector3(orig.transform.position.x, orig.transform.position.y, orig.transform.position.z);
-        //transform.position = new Vector3(0, 0, 0);
-        //newPanel.transform.position = new Vector3(0, 0, 0);
-        //newPanel.transform.localPosition = new Vector3(0, 0, 0);
-
         spawned.Add(id, newPanel);
     }
 
@@ -118,8 +106,4 @@ public class InfoPanelManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    //void Update()
-    //{
-    //}
 }
