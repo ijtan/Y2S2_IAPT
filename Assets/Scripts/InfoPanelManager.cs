@@ -101,7 +101,7 @@ public class InfoPanelManager : MonoBehaviour
     {
         foreach(GameObject g in spawned.Values)
         {
-            transform.position = Camera.main.transform.position + Camera.main.transform.forward * 3f + Camera.main.transform.up * 0.25f;
+            transform.position = Camera.main.transform.position + Camera.main.transform.forward * 2.7f + Camera.main.transform.up * 0.25f;
             transform.rotation = new Quaternion(0.0f, Camera.main.transform.rotation.y, 0.0f, Camera.main.transform.rotation.w);
         }
     }
