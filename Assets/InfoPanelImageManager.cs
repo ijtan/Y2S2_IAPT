@@ -18,7 +18,7 @@ public class InfoPanelImageManager : MonoBehaviour
     //    downloadImages(image_urls);
     //}
 
-    IEnumerator setImageWithUrl(GameObject image, string url)
+    private IEnumerator setImageWithUrl(GameObject image, string url)
     {
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
         yield return request.SendWebRequest();
@@ -27,7 +27,6 @@ public class InfoPanelImageManager : MonoBehaviour
         else
             image.GetComponent<RawImage>().texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
     }
-
 
     public void downloadImages(string[] urls)
     {
@@ -39,7 +38,7 @@ public class InfoPanelImageManager : MonoBehaviour
             StartCoroutine(setImageWithUrl(newImage, s));
             spawnedImages.Add(newImage);
         }
-    }    
+    }
 
     public bool nextImage()
     {
@@ -49,7 +48,7 @@ public class InfoPanelImageManager : MonoBehaviour
             return false;
         }
 
-        if(curr_index!=-1)
+        if (curr_index != -1)
             deactivateImage(curr_index);
         curr_index++;
         activateImage(curr_index);
@@ -74,7 +73,7 @@ public class InfoPanelImageManager : MonoBehaviour
 
     public void hideAllImages()
     {
-        foreach(RawImage i in GetComponentsInChildren<RawImage>())
+        foreach (RawImage i in GetComponentsInChildren<RawImage>())
         {
             i.gameObject.SetActive(false);
         }
@@ -84,10 +83,12 @@ public class InfoPanelImageManager : MonoBehaviour
     {
         return transform.childCount;
     }
+
     public void activateImage(int index)
     {
         GetComponentsInChildren<RawImage>(true)[index].gameObject.SetActive(true);
     }
+
     public void deactivateImage(int index)
     {
         GetComponentsInChildren<RawImage>(true)[index].gameObject.SetActive(false);

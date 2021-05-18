@@ -17,16 +17,13 @@ public class DirectionArrowManager : MonoBehaviour
     public double distance;
     public double real_distance;
 
-
     public Quaternion offset = Quaternion.Euler(0f, 0f, -90f);
 
-
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         Input.compass.enabled = true;
         distanceTextObject = GetComponentInChildren<TextMeshProUGUI>();
-
 
         foreach (Transform child in this.transform)
         {
@@ -35,7 +32,6 @@ public class DirectionArrowManager : MonoBehaviour
                 arrow = child.gameObject.GetComponent<RectTransform>();
                 break;
             }
-                
         }
     }
 
@@ -45,10 +41,8 @@ public class DirectionArrowManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-
-
         string unit = "m";
         distance = CalculateDistance(currentLocation.x, landmarkLocation.x, currentLocation.y, landmarkLocation.y);
         real_distance = distance;
@@ -63,19 +57,16 @@ public class DirectionArrowManager : MonoBehaviour
 
         if (!activated)
         {
-
             float bearing = angleFromCoordinate(currentLocation.x, currentLocation.y, landmarkLocation.x, landmarkLocation.y);
-            arrow.rotation = Quaternion.Slerp(arrow.rotation, Quaternion.Euler(0, 0, Input.compass.magneticHeading + bearing), 100f)*offset;
+            arrow.rotation = Quaternion.Slerp(arrow.rotation, Quaternion.Euler(0, 0, Input.compass.magneticHeading + bearing), 100f) * offset;
         }
-
         else
         {
             arrow.rotation *= Quaternion.Euler(0, 0, rotateSpeedWhenActive);
         }
     }
 
-
-private float CalculateDistance(float lat_1, float lat_2, float long_1, float long_2)
+    private float CalculateDistance(float lat_1, float lat_2, float long_1, float long_2)
     {
         int R = 6371;
         var lat_rad_1 = Mathf.Deg2Rad * lat_1;
@@ -109,6 +100,7 @@ private float CalculateDistance(float lat_1, float lat_2, float long_1, float lo
     {
         activated = true;
     }
+
     public void deactivate()
     {
         activated = false;

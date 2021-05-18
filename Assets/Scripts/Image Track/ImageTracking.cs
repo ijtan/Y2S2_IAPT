@@ -1,14 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Android;
-using UnityEngine.XR;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
 [RequireComponent(typeof(ARTrackedImage))]
-
 public class ImageTracking : MonoBehaviour
 {
     [SerializeField]
@@ -69,7 +64,6 @@ public class ImageTracking : MonoBehaviour
             return;
         }
 
-
         Vector3 pos = trImg.transform.position;
         prefab.transform.position = pos;
         prefab.SetActive(true);
@@ -78,12 +72,10 @@ public class ImageTracking : MonoBehaviour
     //// Start is called before the first frame update
     //void Start()
     //{
-
     //}
 
     //// Update is called once per frame
     //void Update()
     //{
-
     //}
 }

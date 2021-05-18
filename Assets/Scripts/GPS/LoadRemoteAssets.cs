@@ -1,20 +1,18 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Android;
 using UnityEngine.AddressableAssets;
-using UnityEditor;
-using System.Linq.Expressions;
-using System.Linq;
 
 public class LoadRemoteAssets : MonoBehaviour
 {
     [SerializeField] private string _label;
 
     private GPS GPSServ;
+
     //private Web_Pinger api;
     private UI_GPS_UPDATER GPS_UI;
+
     private Dictionary<string, bool> isNear = new Dictionary<string, bool>();
     private Dictionary<string, float> distances = new Dictionary<string, float>();
 
@@ -25,7 +23,7 @@ public class LoadRemoteAssets : MonoBehaviour
     private float lat = 0f;
     private float lon = 0f;
 
-    void Start()
+    private void Start()
     {
         GPS_UI = FindObjectOfType<UI_GPS_UPDATER>();
         GPSServ = FindObjectOfType<GPS>();
@@ -55,13 +53,10 @@ public class LoadRemoteAssets : MonoBehaviour
     {
         var landmarks = await Addressables.LoadResourceLocationsAsync(label).Task;
 
-
         foreach (var landmark in landmarks)
         {
             if (!isNear.ContainsKey(landmark.ToString()))
                 isNear[landmark.ToString()] = false;
-
-
 
             //Debug.Log("Got location: " + location);
             //Debug.Log("Got Data: " + location.Data.ToString());
@@ -93,11 +88,8 @@ public class LoadRemoteAssets : MonoBehaviour
             GPS_UI.closest_landmark = distances.First().Value.ToString();
             GPS_UI.isNear = nresp.near.ToString();
 
-
-
             if (nresp.near && isNear[landmark.ToString()] != nresp.near)
             {
-
                 Debug.Log("Instantiating!");
                 isNear[landmark.ToString()] = nresp.near;
                 GameObject spawn = await Addressables.InstantiateAsync(landmark).Task;
@@ -107,7 +99,6 @@ public class LoadRemoteAssets : MonoBehaviour
             {
                 Debug.Log("removing!");
                 Destroy(spawned[landmark.ToString()]);
-
             }
             else
             {
@@ -115,10 +106,6 @@ public class LoadRemoteAssets : MonoBehaviour
             }
 
             isNear[landmark.ToString()] = nresp.near;
-
         }
-
     }
-
-
 }

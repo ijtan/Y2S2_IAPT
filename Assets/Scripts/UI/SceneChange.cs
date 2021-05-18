@@ -1,27 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 //using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneChange : MonoBehaviour
 {
-
     public void Start()
     {
         //DontDestroyOnLoad(this.gameObject);
     }
+
     public void Update()
     {
-
-
         // Check if Back was pressed this frame
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-
             ListLandsScene();
         }
-
     }
 
     //public void GPS_Scene()
@@ -45,6 +39,7 @@ public class SceneChange : MonoBehaviour
     {
         SceneManager.LoadScene("ClosePointsView");
     }
+
     public void ArMode()
     {
         SceneManager.LoadScene("ArMode");

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
@@ -12,18 +11,18 @@ public class ArPlacement : MonoBehaviour
     private GameObject spawnedObj;
     private Pose pose;
     private ARRaycastManager rayman;
-    bool  placementIsValid = false;
+    private bool placementIsValid = false;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         rayman = FindObjectOfType<ARRaycastManager>();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if(placementIsValid&&Input.touchCount>0 && Input.GetTouch(0).phase==TouchPhase.Began)
+        if (placementIsValid && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
             placeObject();
 
         updatePose();
@@ -50,7 +49,7 @@ public class ArPlacement : MonoBehaviour
 
     private void updateIndicator()
     {
-        if(placementIsValid)
+        if (placementIsValid)
         {
             indicator.SetActive(true);
             indicator.transform.SetPositionAndRotation(pose.position, pose.rotation);

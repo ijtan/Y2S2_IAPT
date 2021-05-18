@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class buttonManager : MonoBehaviour
 {
     public GameObject settingsMenu;
+
     //Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         settingsMenu.SetActive(false);
     }
@@ -14,7 +13,6 @@ public class buttonManager : MonoBehaviour
     //// Update is called once per frame
     //void Update()
     //{
-
     //}
 
     public void showSettings()
@@ -27,13 +25,9 @@ public class buttonManager : MonoBehaviour
         settingsMenu.SetActive(false);
     }
 
-
     public void refreshLandmarksFromApi()
     {
         GPS.Instance.forceOnceUpdateGPS();
         GPS.Instance.updateLandmarksFromApi();
     }
-
-
-
 }

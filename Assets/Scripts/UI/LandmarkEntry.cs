@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,18 +14,15 @@ public class LandmarkEntry : MonoBehaviour
     public double distance;
     public double real_distance;
 
-
-
-
     public DirectionArrowManager dirArrow;
 
     public TextMeshProUGUI title_text_UI;
     public TextMeshProUGUI desc_text_UI;
 
-
     public bool activated = false;
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         GetComponent<Button>().interactable = false;
         Debug.Log("New Entry Instantiated, title is: " + title);
@@ -42,11 +36,10 @@ public class LandmarkEntry : MonoBehaviour
             else if (c.name == "Description")
                 desc_text_UI = c;
         }
-
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (!GPS.Instance.landmarks_data.ContainsKey(id))
         {

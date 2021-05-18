@@ -1,13 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class LandmarkListManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    Dictionary<string, GameObject> buttons = new Dictionary<string, GameObject>();
+    private Dictionary<string, GameObject> buttons = new Dictionary<string, GameObject>();
+
     public GameObject entryPrefab;
     private List<LandmarkEntry> sorted_button_list = new List<LandmarkEntry>();
 
@@ -15,13 +13,11 @@ public class LandmarkListManager : MonoBehaviour
     //[SerializeField] private GameObject loadMoreObjectPosition;
     //[SerializeField] private float scrollRefreshOffset = 30;
 
-    void Start()
+    private void Start()
     {
         //scrollRect = GetComponentInParent<ScrollRect>();
         //scrollRect.onValueChanged.AddListener(OnScrollRectChange);
-
     }
-
 
     //private void OnScrollRectChange(Vector2 position)
     //{
@@ -38,12 +34,9 @@ public class LandmarkListManager : MonoBehaviour
     //    }
     //}
 
-
-
     // Update is called once per frame
 
-
-    void Update()
+    private void Update()
     {
         //GPS.Instance.landmark_
 
@@ -79,7 +72,6 @@ public class LandmarkListManager : MonoBehaviour
                 LandmarkEntry blm = butt.Value.GetComponent<LandmarkEntry>();
                 sorted_button_list.Add(blm);
             }
-
         }
 
         sorted_button_list.Sort((x, y) => x.real_distance.CompareTo(y.real_distance));
@@ -88,9 +80,5 @@ public class LandmarkListManager : MonoBehaviour
         {
             buttons[sorted_button_list[i].id].transform.SetSiblingIndex(i);
         }
-
-        
     }
-
-
 }

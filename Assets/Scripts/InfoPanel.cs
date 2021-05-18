@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class InfoPanel : MonoBehaviour
@@ -23,13 +19,12 @@ public class InfoPanel : MonoBehaviour
 
     private InfoPanelImageManager imageManager;
 
-
     //float x;
     //float y;
     //float z;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         transform.position = new Vector3(0, 0, 2);
         imageManager = GetComponentInChildren<InfoPanelImageManager>();
@@ -40,17 +35,16 @@ public class InfoPanel : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         Desc.text = description;
         Title.text = title;
-        // Rotate towards target    
+        // Rotate towards target
         var targetPoint = Camera.main.transform.position;
         targetPoint.y = transform.position.y;
 
         var targetRotation = Quaternion.LookRotation(targetPoint - transform.position, Vector3.up);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 2.0f);
-
 
         if (Camera.main)
         {
@@ -66,13 +60,11 @@ public class InfoPanel : MonoBehaviour
         else
             prevPage.interactable = true;
 
-        if (imageManager.curr_index+1 >= imageManager.imageCount())
+        if (imageManager.curr_index + 1 >= imageManager.imageCount())
             nextPage.interactable = false;
         else
             nextPage.interactable = true;
-
     }
-
 
     public void showNextPage()
     {
@@ -85,16 +77,13 @@ public class InfoPanel : MonoBehaviour
         }
 
         imageManager.nextImage();
-
     }
 
     public void showPrevPage()
     {
-        
         if (imageManager.curr_index - 1 < -1)
             return;
 
-        
         if (imageManager.curr_index - 1 == -1)
         {
             imageManager.curr_index--;
@@ -104,10 +93,7 @@ public class InfoPanel : MonoBehaviour
         }
 
         imageManager.prevImage();
-
     }
-
-
 
     //IEnumerator DownloadImage(string MediaUrl)
     //{

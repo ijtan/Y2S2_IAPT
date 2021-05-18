@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-
 
 public class information_panel_details
 {
@@ -13,19 +11,23 @@ public class information_panel_details
     public float y;
     public float z;
 }
+
 public class InfoPanelManager : MonoBehaviour
 {
     public GameObject InfoPanelPrefab;
     public string id;
     public Dictionary<string, GameObject> spawned = new Dictionary<string, GameObject>();
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         consumeRetainer();
         spawnFromRetainer();
         //spawnNewInfo(id);
     }
+
     private landmark_info landmark;
+
     public void consumeRetainer()
     {
         var ir = FindObjectOfType<InformationRetainer>();
@@ -50,7 +52,7 @@ public class InfoPanelManager : MonoBehaviour
         newPanelInfo.image_urls = landmark.image_urls;
 
         Vector3 camPos = Camera.main.transform.position;
-        
+
         newPanel.transform.SetParent(this.transform, true);
         newPanel.transform.position = new Vector3(camPos.x + 2, camPos.y, camPos.z);
         //newPanel.transform.position = new Vector3(landmark.x, landmark.y, landmark.z);
@@ -66,10 +68,8 @@ public class InfoPanelManager : MonoBehaviour
         args.Add("landmark_id", id);
         args.Add("uid", SystemInfo.deviceUniqueIdentifier);
 
-
         int index = Web_Pinger.Instance.counter;
         Web_Pinger.Instance.pingAPI("getInfo", args);
-
 
         int count = 0;
         while (Web_Pinger.Instance.responses.Count <= index)
@@ -82,8 +82,6 @@ public class InfoPanelManager : MonoBehaviour
                 Debug.LogError("Info fetching Timed out!");
                 break;
             }
-
-
         };
 
         string resp = Web_Pinger.Instance.responses[index];
@@ -100,10 +98,8 @@ public class InfoPanelManager : MonoBehaviour
         spawned.Add(id, newPanel);
     }
 
-
     // Update is called once per frame
     //void Update()
     //{
-
     //}
 }
