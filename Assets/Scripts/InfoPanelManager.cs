@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.XR.ARFoundation;
 
 public class information_panel_details
 {
@@ -93,9 +94,28 @@ public class InfoPanelManager : MonoBehaviour
         newPanelInfo.description = ipd.title;
         newPanelInfo.image_urls = ipd.image_urls;
         newPanel.transform.SetParent(this.transform, false);
-        newPanel.transform.position = new Vector3(ipd.x, ipd.y, ipd.z);
+
+        //var orig = FindObjectOfType<ARPoseDriver>();
+
+        //orig.transform.position = new Vector3(0, 0, 0);
+        //orig.transform.localPosition = new Vector3(0, 0, 0);
+        
+        //orig
+        //transform.parent.transform.position = new Vector3(orig.transform.position.x, orig.transform.position.y, orig.transform.position.z);
+        //transform.position = new Vector3(0, 0, 0);
+        //newPanel.transform.position = new Vector3(0, 0, 0);
+        //newPanel.transform.localPosition = new Vector3(0, 0, 0);
 
         spawned.Add(id, newPanel);
+    }
+
+    public void resetPositions()
+    {
+        foreach(GameObject g in spawned.Values)
+        {
+            transform.position = Camera.main.transform.position + Camera.main.transform.forward * 3f + Camera.main.transform.up * 0.25f;
+            transform.rotation = new Quaternion(0.0f, Camera.main.transform.rotation.y, 0.0f, Camera.main.transform.rotation.w);
+        }
     }
 
     // Update is called once per frame

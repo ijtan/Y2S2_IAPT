@@ -36,6 +36,9 @@ public class Web_Pinger : MonoBehaviour
     {
         if (_instance != null && _instance != this)
         {
+            _instance.hostname_input = hostname_input;
+            _instance.port_input = port_input;
+            _instance.setupPrefs();
             Destroy(this.gameObject);
         }
         else

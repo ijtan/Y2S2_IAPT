@@ -1,6 +1,8 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SpatialTracking;
 using UnityEngine.UI;
+using UnityEngine.XR.ARFoundation;
 
 public class InfoPanel : MonoBehaviour
 {
@@ -35,9 +37,21 @@ public class InfoPanel : MonoBehaviour
     }
 
     // Update is called once per frame
+    private bool updated = false;
     private void Update()
     {
+        var posd = FindObjectOfType<ARPoseDriver>();
+        if (!updated && (Vector3.Distance(posd.transform.position, new Vector3(0, 0, 0)) > 0.1))
+        {
+            updated = true;
+            //transform.position = new Vector3(transform.position.x - posd.transform.position.x, transform.position.y - posd.transform.position.y, transform.position.z - posd.transform.position.z);
+            FindObjectOfType<InfoPanelManager>().resetPositions();
+        }
         Desc.text = description;
+        string posits = transform.position.ToString() + '\n' + transform.parent.position.ToString() + '\n' + FindObjectOfType<ARPoseDriver>().transform.position.ToString() + '\n' + FindObjectOfType<ARPoseDriver>().transform.parent.position.ToString() + '\n' + Camera.main.transform.position.ToString() + '\n' + Camera.main.transform.parent.position.ToString();
+        Desc.text = posits;
+
+
         Title.text = title;
         // Rotate towards target
         var targetPoint = Camera.main.transform.position;
